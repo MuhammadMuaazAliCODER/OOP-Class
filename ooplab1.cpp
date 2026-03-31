@@ -1,749 +1,697 @@
-/*
-=============================================================================
-  HOTEL MANAGEMENT SYSTEM
-  Covers: Pointers, Dynamic Memory, OOP Concepts, Classes, Constructors,
-          Destructors, Copy Constructors, Operator Overloading, Static Members,
-          Const Members, Friend Functions, Arrow Operator, new/delete,
-          File Handling, Access Modifiers, Encapsulation, Abstraction, etc.
-=============================================================================
-*/
+// ============================================================
+//   SOCIETY MANAGEMENT SYSTEM
+//   Covers: All OOP concepts from Week 1-6 + CLO1, CLO2, CLO3
+// ============================================================
+//
+//  TOPICS COVERED:
+//  [Week 0] Pointers, dynamic memory, structured vs OOP
+//  [Week 1] Classes & Objects, implicit member functions,
+//           default/copy constructor, destructor, =, &,
+//           access modifiers (public/private)
+//  [Week 2] Programmer-defined constructor, copy constructor,
+//           destructor, assignment operator, overloading
+//           constructors, shallow vs deep copy,
+//           constructor initializer list
+//  [Week 3] Separate declaration & definition, accessors,
+//           utility methods, objects as argument/return type,
+//           cascaded function calls
+//  [Week 4] Static members, const members, object members,
+//           initializer list revisited, implicit 'this' pointer
+//  [Week 5] Arrow (->) operator, new/delete for objects
+//  [Week 6] Operator overloading (member & friend functions),
+//           cascaded operator calls, restrictions on friend
+//           operators for [], (), ->
+// ============================================================
 
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <cstring>
+#include <iomanip>
 using namespace std;
 
 // ============================================================
-// WEEK 1 - CLO1: Utility / Helper
+//  FORWARD DECLARATIONS
 // ============================================================
-void clearScreen() {
-    cout << "\n------------------------------------------------------------\n";
-}
-
-void pauseScreen() {
-    cout << "\nPress Enter to continue...";
-    cin.ignore();
-    cin.get();
-}
+class Address;
+class Person;
+class Member;
+class Society;
 
 // ============================================================
-// WEEK 1 - CLO1: Base concept - Protection, Encapsulation,
-//                Abstraction via Class
+//  CLASS: Address
+//  Demonstrates: object-as-member, deep copy, initializer list
 // ============================================================
-
-// Forward declaration (used for friend function later)
-class Room;
-
-// ============================================================
-// CLASS: Guest
-// Covers: Week 1 (CLO1) - Migration from struct to class
-//         Week 2 (CLO2) - Constructors, Copy Constructor, Destructor
-//         Week 3 (CLO2) - Accessors, objects as return type
-//         Week 4 (CLO3) - const members, this pointer
-//         Week 5 (CLO3) - dynamic memory with new/delete
-//         Week 6 (CLO3) - Operator Overloading
-// ============================================================
-class Guest {
+class Address {
 private:
-    // Private data members - Encapsulation (Week 1)
-    int    id;
-    char*  name;       // dynamic char array - Week 5
-    char*  cnic;
-    int    roomNumber;
-    float  totalBill;
-
-    // Static member - shared across all objects (Week 4)
-    static int guestCount;
+    char* street;   // dynamic memory => deep copy needed
+    int houseNo;
 
 public:
-    // ---- Default Constructor (Week 1 - implicitly available, Week 2 - programmer defined) ----
-    Guest() {
-        id         = 0;
-        name       = new char[50];   // dynamic allocation - Week 5
-        cnic       = new char[20];
+    // --- Default Constructor (Week 1/2) ---
+    Address() : houseNo(0) {
+        street = new char[50];
+        strcpy(street, "Unknown Street");
+        cout << "  [Address] Default constructor called\n";
+    }
+
+    // --- Parameterized Constructor (Week 2) ---
+    Address(const char* s, int h) : houseNo(h) {
+        street = new char[strlen(s) + 1];
+        strcpy(street, s);
+    }
+
+    // --- Copy Constructor - DEEP COPY (Week 2) ---
+    Address(const Address& other) : houseNo(other.houseNo) {
+        street = new char[strlen(other.street) + 1];
+        strcpy(street, other.street);
+        cout << "  [Address] Deep copy constructor called\n";
+    }
+
+    // --- Assignment Operator = (Week 1/2) ---
+    Address& operator=(const Address& other) {
+        if (this != &other) {           // self-assignment check
+            delete[] street;
+            street = new char[strlen(other.street) + 1];
+            strcpy(street, other.street);
+            houseNo = other.houseNo;
+        }
+        return *this;                   // cascaded assignment support
+    }
+
+    // --- Destructor (Week 2) ---
+    ~Address() {
+        delete[] street;
+        cout << "  [Address] Destructor called\n";
+    }
+
+    // --- Accessors (Week 3) ---
+    const char* getStreet() const { return street; }
+    int getHouseNo()        const { return houseNo; }
+
+    void setStreet(const char* s) {
+        delete[] street;
+        street = new char[strlen(s) + 1];
+        strcpy(street, s);
+    }
+    void setHouseNo(int h) { houseNo = h; }
+
+    void display() const {
+        cout << "House #" << houseNo << ", " << street;
+    }
+};
+
+
+// ============================================================
+//  CLASS: Person
+//  Demonstrates: encapsulation, abstraction, object member,
+//                initializer list, this pointer, static member
+// ============================================================
+class Person {
+private:
+    char*   name;           // dynamic => deep copy
+    int     age;
+    Address address;        // object-as-member (Week 4)
+
+    static int totalPersons; // Static member (Week 4)
+
+public:
+    // --- Default Constructor ---
+    Person() : age(0), address() {
+        name = new char[50];
         strcpy(name, "Unknown");
-        strcpy(cnic, "00000-0000000-0");
-        roomNumber = 0;
-        totalBill  = 0.0f;
-        guestCount++;
-        cout << "[Guest Default Constructor Called]\n";
+        totalPersons++;
+        cout << "  [Person] Default constructor | Total: " << totalPersons << "\n";
     }
 
-    // ---- Parameterized Constructor (overloaded - Week 2) ----
-    Guest(int _id, const char* _name, const char* _cnic, int _room)
-        : id(_id), roomNumber(_room), totalBill(0.0f)   // initializer list - Week 3/4
+    // --- Parameterized Constructor with initializer list (Week 2/4) ---
+    Person(const char* n, int a, const char* street, int hNo)
+        : age(a), address(street, hNo)   // initializer list
     {
-        name = new char[strlen(_name) + 1];   // deep copy allocation - Week 2
-        cnic = new char[strlen(_cnic) + 1];
-        strcpy(name, _name);
-        strcpy(cnic, _cnic);
-        guestCount++;
-        cout << "[Guest Parameterized Constructor Called for: " << name << "]\n";
+        name = new char[strlen(n) + 1];
+        strcpy(name, n);
+        totalPersons++;
     }
 
-    // ---- Copy Constructor - Deep Copy (Week 2) ----
-    Guest(const Guest& other)
-        : id(other.id), roomNumber(other.roomNumber), totalBill(other.totalBill)
-    {
-        // Deep copy of dynamic memory (not shallow) - Week 2
+    // --- Copy Constructor - DEEP COPY (Week 2) ---
+    Person(const Person& other) : age(other.age), address(other.address) {
         name = new char[strlen(other.name) + 1];
-        cnic = new char[strlen(other.cnic) + 1];
         strcpy(name, other.name);
-        strcpy(cnic, other.cnic);
-        guestCount++;
-        cout << "[Guest Copy Constructor Called]\n";
+        totalPersons++;
+        cout << "  [Person] Copy constructor (deep copy)\n";
     }
 
-    // ---- Destructor (Week 1 implicitly available, Week 2 programmer defined) ----
-    ~Guest() {
-        cout << "[Guest Destructor Called for: " << name << "]\n";
-        delete[] name;   // free dynamic memory - Week 5
-        delete[] cnic;
-        guestCount--;
-    }
-
-    // ---- Assignment Operator Overload (Week 2, Week 6) ----
-    Guest& operator=(const Guest& other) {
-        if (this == &other) return *this;   // self-assignment check, this pointer - Week 4
-        delete[] name;
-        delete[] cnic;
-        id         = other.id;
-        roomNumber = other.roomNumber;
-        totalBill  = other.totalBill;
-        name = new char[strlen(other.name) + 1];
-        cnic = new char[strlen(other.cnic) + 1];
-        strcpy(name, other.name);
-        strcpy(cnic, other.cnic);
-        cout << "[Assignment Operator Called]\n";
+    // --- Assignment Operator (Week 2) ---
+    Person& operator=(const Person& other) {
+        if (this != &other) {
+            delete[] name;
+            name = new char[strlen(other.name) + 1];
+            strcpy(name, other.name);
+            age     = other.age;
+            address = other.address;    // uses Address::operator=
+        }
         return *this;
     }
 
-    // ---- Equality Operator Overload as member (Week 6) ----
-    bool operator==(const Guest& other) const {
-        return (id == other.id);
+    // --- Destructor (Week 2) ---
+    virtual ~Person() {
+        cout << "  [Person] Destructor for: " << name << "\n";
+        delete[] name;
+        totalPersons--;
     }
 
-    // ---- Addition Operator: add to bill (Week 6) ----
-    Guest& operator+=(float amount) {
-        totalBill += amount;
-        return *this;   // cascaded calls - Week 6
+    // --- Accessors & Mutators (Week 3) ---
+    const char* getName()    const { return name; }
+    int         getAge()     const { return age;  }
+    const Address& getAddress() const { return address; }
+
+    void setName(const char* n) {
+        delete[] name;
+        name = new char[strlen(n) + 1];
+        strcpy(name, n);
+    }
+    void setAge(int a)             { age = a; }
+    void setAddress(const Address& a) { address = a; }
+
+    // --- Static member accessor (Week 4) ---
+    static int getTotalPersons() { return totalPersons; }
+
+    // --- Utility / display (Week 3) ---
+    virtual void display() const {
+        cout << "  Name   : " << name << "\n"
+             << "  Age    : " << age  << "\n"
+             << "  Address: "; address.display(); cout << "\n";
     }
 
-    // ---- Accessors (Week 3 - CLO2) ----
-    int   getId()         const { return id; }
-    const char* getName() const { return name; }
-    const char* getCnic() const { return cnic; }
-    int   getRoomNumber() const { return roomNumber; }
-    float getTotalBill()  const { return totalBill; }
-
-    // ---- Mutators ----
-    void setId(int _id)              { id = _id; }
-    void setName(const char* _name)  { delete[] name; name = new char[strlen(_name)+1]; strcpy(name,_name); }
-    void setRoomNumber(int r)        { roomNumber = r; }
-    void addToBill(float amount)     { totalBill += amount; }
-
-    // ---- Static member accessor (Week 4) ----
-    static int getGuestCount() { return guestCount; }
-
-    // ---- Display (Utility method - Week 3) ----
-    void display() const {
-        cout << "  ID        : " << id         << "\n";
-        cout << "  Name      : " << name       << "\n";
-        cout << "  CNIC      : " << cnic       << "\n";
-        cout << "  Room No   : " << roomNumber << "\n";
-        cout << "  Total Bill: Rs. " << totalBill << "\n";
+    // --- this pointer usage (Week 4) ---
+    Person& copyFrom(const Person& other) {
+        *this = other;          // explicit use of this
+        return *this;
     }
 
-    // ---- Output Operator Overload as friend (Week 6) ----
-    friend ostream& operator<<(ostream& out, const Guest& g);
+    // --- Address-of operator & (Week 1) ---
+    // (Built-in, but we demonstrate using it explicitly in main)
+};
 
-    // ---- Save guest to file (Text File Handling) ----
-    void saveToFile() const {
-        ofstream file("guests.txt", ios::app);
-        if (file.is_open()) {
-            file << id << "," << name << "," << cnic << ","
-                 << roomNumber << "," << totalBill << "\n";
-            file.close();
-        }
+int Person::totalPersons = 0;   // static member definition (Week 4)
+
+
+// ============================================================
+//  CLASS: Member   (inherits Person)
+//  Demonstrates: const member, cascaded calls, operator overloading
+// ============================================================
+class Member : public Person {
+private:
+    int         memberId;
+    double      dues;           // monthly dues
+    bool        hasPaid;
+
+    const int   SOCIETY_CODE;   // const member (Week 4)
+
+    static int  nextId;         // static counter
+
+public:
+    // --- Default Constructor with initializer list for const (Week 4) ---
+    Member() : Person(), memberId(nextId++), dues(500.0),
+               hasPaid(false), SOCIETY_CODE(1001)
+    {
+        cout << "  [Member] Default constructor | ID: " << memberId << "\n";
+    }
+
+    // --- Parameterized Constructor ---
+    Member(const char* n, int a, const char* street, int hNo, double d)
+        : Person(n, a, street, hNo),
+          memberId(nextId++), dues(d), hasPaid(false), SOCIETY_CODE(1001)
+    {}
+
+    // --- Copy Constructor (Week 2) ---
+    Member(const Member& other)
+        : Person(other), memberId(nextId++),
+          dues(other.dues), hasPaid(other.hasPaid), SOCIETY_CODE(1001)
+    {
+        cout << "  [Member] Copy constructor called\n";
+    }
+
+    // --- Destructor ---
+    ~Member() override {
+        cout << "  [Member] Destructor for member ID: " << memberId << "\n";
+    }
+
+    // --- Accessors (Week 3) ---
+    int    getMemberId() const { return memberId;    }
+    double getDues()     const { return dues;        }
+    bool   isPaid()      const { return hasPaid;     }
+    int    getSocCode()  const { return SOCIETY_CODE;} // const member read
+
+    // --- Utility: pay dues (Week 3) - returns *this for cascading (Week 3) ---
+    Member& payDues() {
+        hasPaid = true;
+        cout << "  >> Member " << getName() << " paid dues of Rs." << dues << "\n";
+        return *this;   // cascaded call support
+    }
+
+    Member& resetDues() {
+        hasPaid = false;
+        return *this;
+    }
+
+    Member& updateDues(double d) {
+        dues = d;
+        return *this;
+    }
+
+    // --------------------------------------------------------
+    //  OPERATOR OVERLOADING (Week 6)
+    // --------------------------------------------------------
+
+    // --- operator== as MEMBER function (Week 6) ---
+    bool operator==(const Member& other) const {
+        return memberId == other.memberId;
+    }
+
+    // --- operator< as MEMBER function (for sorting / comparison) ---
+    bool operator<(const Member& other) const {
+        return dues < other.dues;
+    }
+
+    // --- operator+= as MEMBER (add to dues) ---
+    Member& operator+=(double amount) {
+        dues += amount;
+        return *this;   // cascaded: m += 100 += 200 (chaining)
+    }
+
+    // --- operator<< as FRIEND function (Week 6) ---
+    // Note: [], (), -> cannot be friend operators (Week 6 restriction note)
+    friend ostream& operator<<(ostream& out, const Member& m);
+
+    // --- operator>> as FRIEND function ---
+    friend istream& operator>>(istream& in, Member& m);
+
+    void display() const override {
+        cout << "  ---- Member Info ----\n";
+        Person::display();
+        cout << "  Member ID  : " << memberId << "\n"
+             << "  Society Code: " << SOCIETY_CODE << "\n"
+             << "  Monthly Dues: Rs." << fixed << setprecision(2) << dues << "\n"
+             << "  Dues Paid  : " << (hasPaid ? "Yes" : "No") << "\n";
     }
 };
 
-// Static member definition (Week 4)
-int Guest::guestCount = 0;
+int Member::nextId = 1001;  // static member definition
 
-// Friend function definition (Week 6)
-ostream& operator<<(ostream& out, const Guest& g) {
-    out << "Guest[" << g.id << "] " << g.name
-        << " | Room: " << g.roomNumber
-        << " | Bill: Rs." << g.totalBill;
-    return out;
+// --- Friend operator<< definition (Week 6) ---
+ostream& operator<<(ostream& out, const Member& m) {
+    out << "[ID:" << m.memberId << "] "
+        << m.getName() << " | Dues: Rs." << m.dues
+        << " | Paid: " << (m.hasPaid ? "Yes" : "No");
+    return out; // cascaded: cout << m1 << m2
 }
 
-// ============================================================
-// CLASS: Room
-// Covers: Week 1-6 concepts, const members, static members,
-//         operator overloading, friend functions
-// ============================================================
-class Room {
-private:
-    int         number;
-    string      type;        // "Single", "Double", "Suite"
-    float       pricePerNight;
-    bool        isOccupied;
-    static int  totalRooms;  // Week 4 - static member
-
-public:
-    // ---- Constructor with initializer list (Week 3/4) ----
-    Room() : number(0), type("Standard"), pricePerNight(1000.0f), isOccupied(false) {
-        totalRooms++;
-    }
-
-    Room(int _num, const string& _type, float _price)
-        : number(_num), type(_type), pricePerNight(_price), isOccupied(false)
-    {
-        totalRooms++;
-    }
-
-    // ---- Copy Constructor ----
-    Room(const Room& other)
-        : number(other.number), type(other.type),
-          pricePerNight(other.pricePerNight), isOccupied(other.isOccupied)
-    {
-        totalRooms++;
-    }
-
-    // ---- Destructor ----
-    ~Room() {
-        totalRooms--;
-    }
-
-    // ---- Accessors (Week 3) ----
-    int    getNumber()       const { return number; }
-    string getType()         const { return type; }
-    float  getPrice()        const { return pricePerNight; }
-    bool   getIsOccupied()   const { return isOccupied; }
-
-    // ---- Mutators ----
-    void checkIn()  { isOccupied = true; }
-    void checkOut() { isOccupied = false; }
-
-    // ---- Static accessor (Week 4) ----
-    static int getTotalRooms() { return totalRooms; }
-
-    // ---- Comparison operator as member (Week 6) ----
-    bool operator==(const Room& other) const {
-        return number == other.number;
-    }
-
-    // ---- Less-than operator (Week 6) ----
-    bool operator<(const Room& other) const {
-        return pricePerNight < other.pricePerNight;
-    }
-
-    // ---- Display ----
-    void display() const {
-        cout << "  Room No   : " << number        << "\n";
-        cout << "  Type      : " << type          << "\n";
-        cout << "  Price/Night: Rs. " << pricePerNight << "\n";
-        cout << "  Status    : " << (isOccupied ? "Occupied" : "Available") << "\n";
-    }
-
-    // ---- Friend operator<< (Week 6 - friend function) ----
-    friend ostream& operator<<(ostream& out, const Room& r);
-
-    // ---- Save to file ----
-    void saveToFile() const {
-        ofstream file("rooms.txt", ios::app);
-        if (file.is_open()) {
-            file << number << "," << type << "," << pricePerNight
-                 << "," << isOccupied << "\n";
-            file.close();
-        }
-    }
-};
-
-int Room::totalRooms = 0;
-
-ostream& operator<<(ostream& out, const Room& r) {
-    out << "Room[" << r.number << "] " << r.type
-        << " Rs." << r.pricePerNight << "/night"
-        << " | " << (r.isOccupied ? "Occupied" : "Available");
-    return out;
+// --- Friend operator>> definition (Week 6) ---
+istream& operator>>(istream& in, Member& m) {
+    cout << "  Enter dues amount: ";
+    in >> m.dues;
+    return in;
 }
 
-// ============================================================
-// CLASS: Booking
-// Covers: Objects as members (Week 4), const members,
-//         Arrow operator usage (Week 5), new/delete (Week 5)
-// ============================================================
-class Booking {
-private:
-    int     bookingId;
-    int     guestId;
-    int     roomNumber;
-    int     nights;
-    float   totalCost;
-    string  checkInDate;
-    string  checkOutDate;
 
-    static int bookingCount;
+// ============================================================
+//  CLASS: Society
+//  Demonstrates: dynamic array with new/delete (Week 5),
+//                arrow operator (Week 5), static member,
+//                objects as arg/return (Week 3)
+// ============================================================
+class Society {
+private:
+    char*    societyName;
+    Member** members;       // dynamic array of pointers (Week 5)
+    int      capacity;
+    int      count;
+
+    static int totalSocieties;  // Week 4
 
 public:
-    Booking()
-        : bookingId(0), guestId(0), roomNumber(0),
-          nights(0), totalCost(0.0f),
-          checkInDate("N/A"), checkOutDate("N/A")
-    {
-        bookingCount++;
+    // --- Constructor ---
+    Society(const char* name, int cap = 10) : capacity(cap), count(0) {
+        societyName = new char[strlen(name) + 1];
+        strcpy(societyName, name);
+
+        // Dynamic allocation with new[] (Week 5)
+        members = new Member*[capacity];
+        for (int i = 0; i < capacity; i++) members[i] = nullptr;
+
+        totalSocieties++;
+        cout << "\n  [Society] '" << societyName << "' created. Total societies: " << totalSocieties << "\n";
     }
 
-    Booking(int bId, int gId, int rNum, int n, float price,
-            const string& cIn, const string& cOut)
-        : bookingId(bId), guestId(gId), roomNumber(rNum),
-          nights(n), totalCost(n * price),
-          checkInDate(cIn), checkOutDate(cOut)
-    {
-        bookingCount++;
-    }
-
-    ~Booking() { bookingCount--; }
-
-    // Accessors
-    int    getBookingId()   const { return bookingId; }
-    int    getGuestId()     const { return guestId; }
-    int    getRoomNumber()  const { return roomNumber; }
-    int    getNights()      const { return nights; }
-    float  getTotalCost()   const { return totalCost; }
-    string getCheckIn()     const { return checkInDate; }
-    string getCheckOut()    const { return checkOutDate; }
-
-    static int getBookingCount() { return bookingCount; }
-
-    void display() const {
-        cout << "  Booking ID  : " << bookingId   << "\n";
-        cout << "  Guest ID    : " << guestId     << "\n";
-        cout << "  Room Number : " << roomNumber  << "\n";
-        cout << "  Nights      : " << nights      << "\n";
-        cout << "  Check-In    : " << checkInDate << "\n";
-        cout << "  Check-Out   : " << checkOutDate<< "\n";
-        cout << "  Total Cost  : Rs. " << totalCost << "\n";
-    }
-
-    // Operator == as member
-    bool operator==(const Booking& other) const {
-        return bookingId == other.bookingId;
-    }
-
-    // Save to file
-    void saveToFile() const {
-        ofstream file("bookings.txt", ios::app);
-        if (file.is_open()) {
-            file << bookingId << "," << guestId << "," << roomNumber << ","
-                 << nights << "," << totalCost << ","
-                 << checkInDate << "," << checkOutDate << "\n";
-            file.close();
+    // --- Destructor: de-allocate with delete (Week 5) ---
+    ~Society() {
+        cout << "\n  [Society] Destroying '" << societyName << "'...\n";
+        for (int i = 0; i < count; i++) {
+            delete members[i];      // delete each Member object (Week 5)
+            members[i] = nullptr;
         }
+        delete[] members;           // delete array (Week 5)
+        delete[] societyName;
+        totalSocieties--;
     }
 
-    friend ostream& operator<<(ostream& out, const Booking& b);
-};
-
-int Booking::bookingCount = 0;
-
-ostream& operator<<(ostream& out, const Booking& b) {
-    out << "Booking[" << b.bookingId << "] Guest:" << b.guestId
-        << " Room:" << b.roomNumber << " Nights:" << b.nights
-        << " Cost:Rs." << b.totalCost;
-    return out;
-}
-
-// ============================================================
-// CLASS: Hotel (Main controller class)
-// Covers: dynamic arrays (new/delete - Week 5), arrow operator,
-//         static members, all Week 1-6 topics
-// ============================================================
-class Hotel {
-private:
-    string   hotelName;
-    int      maxRooms;
-    int      maxGuests;
-    int      maxBookings;
-
-    Room**    rooms;      // dynamic array of Room pointers - Week 5 (arrow operator)
-    Guest**   guests;     // dynamic array of Guest pointers - Week 5
-    Booking** bookings;   // dynamic array of Booking pointers
-
-    int roomCount;
-    int guestCount;
-    int bookingIdCounter;
-
-public:
-    // Constructor - allocates dynamic arrays (Week 5)
-    Hotel(const string& name, int maxR = 10, int maxG = 20, int maxB = 50)
-        : hotelName(name), maxRooms(maxR), maxGuests(maxG), maxBookings(maxB),
-          roomCount(0), guestCount(0), bookingIdCounter(1)
-    {
-        rooms    = new Room*[maxRooms];       // array of pointers - Week 5
-        guests   = new Guest*[maxGuests];
-        bookings = new Booking*[maxBookings];
-
-        // Initialize to nullptr
-        for (int i = 0; i < maxRooms;    i++) rooms[i]    = nullptr;
-        for (int i = 0; i < maxGuests;   i++) guests[i]   = nullptr;
-        for (int i = 0; i < maxBookings; i++) bookings[i] = nullptr;
-
-        cout << "\n[Hotel '" << hotelName << "' Created Successfully]\n";
-        initializeDefaultRooms();
-    }
-
-    // Destructor - frees all dynamic memory (Week 2, Week 5)
-    ~Hotel() {
-        for (int i = 0; i < maxRooms; i++)
-            if (rooms[i]) delete rooms[i];   // delete each Room object - Week 5
-        for (int i = 0; i < maxGuests; i++)
-            if (guests[i]) delete guests[i];
-        for (int i = 0; i < maxBookings; i++)
-            if (bookings[i]) delete bookings[i];
-
-        delete[] rooms;      // delete arrays
-        delete[] guests;
-        delete[] bookings;
-        cout << "[Hotel Destructor Called - Memory Freed]\n";
-    }
-
-    // Initialize some default rooms
-    void initializeDefaultRooms() {
-        addRoom(101, "Single",  1500.0f);
-        addRoom(102, "Single",  1500.0f);
-        addRoom(201, "Double",  2500.0f);
-        addRoom(202, "Double",  2500.0f);
-        addRoom(301, "Suite",   5000.0f);
-        cout << "[Default Rooms Initialized]\n";
-    }
-
-    // ---- Add Room (uses arrow operator -> Week 5) ----
-    bool addRoom(int num, const string& type, float price) {
-        if (roomCount >= maxRooms) {
-            cout << "Max room limit reached!\n";
-            return false;
+    // --- Add member using new (Week 5) ---
+    void addMember(const char* name, int age, const char* street, int hNo, double dues) {
+        if (count >= capacity) {
+            cout << "  Society is full!\n";
+            return;
         }
-        rooms[roomCount] = new Room(num, type, price);   // new - Week 5
-        rooms[roomCount]->saveToFile();                  // arrow operator -> - Week 5
-        roomCount++;
-        return true;
+        // Instantiate in heap using new (Week 5)
+        members[count] = new Member(name, age, street, hNo, dues);
+        cout << "  >> Added: " << name << " to " << societyName << "\n";
+        count++;
     }
 
-    // ---- Find Room by number ----
-    Room* findRoom(int num) {
-        for (int i = 0; i < roomCount; i++)
-            if (rooms[i]->getNumber() == num)   // arrow operator -> - Week 5
-                return rooms[i];
-        return nullptr;
+    // --- Arrow operator -> usage (Week 5) ---
+    void showMember(int index) const {
+        if (index < 0 || index >= count) { cout << "  Invalid index!\n"; return; }
+        // Using -> operator to access member through pointer (Week 5)
+        members[index]->display();
     }
 
-    // ---- Find Guest by ID ----
-    Guest* findGuest(int id) {
-        for (int i = 0; i < guestCount; i++)
-            if (guests[i]->getId() == id)       // arrow operator ->
-                return guests[i];
-        return nullptr;
+    // --- Object as return type (Week 3) ---
+    Member getMemberCopy(int index) const {
+        if (index >= 0 && index < count)
+            return *members[index]; // returns a copy (invokes copy constructor)
+        return Member();
     }
 
-    // ---- Check In a Guest ----
-    bool checkIn(int guestId, const char* name, const char* cnic,
-                 int roomNum, int nights,
-                 const string& checkInDate, const string& checkOutDate)
-    {
-        Room* room = findRoom(roomNum);
-        if (!room) {
-            cout << "Room " << roomNum << " not found!\n";
-            return false;
-        }
-        if (room->getIsOccupied()) {   // arrow operator ->
-            cout << "Room " << roomNum << " is already occupied!\n";
-            return false;
-        }
-        if (guestCount >= maxGuests) {
-            cout << "Max guest limit reached!\n";
-            return false;
-        }
-
-        // Create Guest dynamically (Week 5 - new operator)
-        guests[guestCount] = new Guest(guestId, name, cnic, roomNum);
-        guests[guestCount]->saveToFile();
-        guestCount++;
-
-        // Create Booking dynamically
-        int bCount = Booking::getBookingCount();
-        bookings[bCount] = new Booking(bookingIdCounter++, guestId,
-                                       roomNum, nights,
-                                       room->getPrice(),
-                                       checkInDate, checkOutDate);
-        bookings[bCount]->saveToFile();
-
-        // Add bill to guest using += operator (Week 6)
-        Guest* g = findGuest(guestId);
-        if (g) {
-            *g += bookings[bCount]->getTotalCost();   // Week 6 - operator+=
-        }
-
-        room->checkIn();   // mark room as occupied
-        cout << "\nCheck-In Successful!\n";
-        cout << *bookings[bCount] << "\n";   // operator<< Week 6
-        return true;
-    }
-
-    // ---- Check Out a Guest ----
-    bool checkOut(int guestId) {
-        Guest* guest = findGuest(guestId);
-        if (!guest) {
-            cout << "Guest with ID " << guestId << " not found!\n";
-            return false;
-        }
-
-        Room* room = findRoom(guest->getRoomNumber());
-        if (room) room->checkOut();
-
-        cout << "\n=== Check-Out Details ===\n";
-        cout << *guest << "\n";   // operator<< Week 6
-        guest->display();
-
-        // Update file record
-        guest->saveToFile();
-
-        cout << "\nCheck-Out Successful!\n";
-        return true;
-    }
-
-    // ---- Display All Rooms ----
-    void displayAllRooms() const {
-        cout << "\n====== ROOMS (" << roomCount << " total) ======\n";
-        for (int i = 0; i < roomCount; i++) {
-            cout << *rooms[i] << "\n";   // operator<< Week 6
-        }
-        cout << "Total Room objects: " << Room::getTotalRooms() << "\n";
-    }
-
-    // ---- Display Available Rooms ----
-    void displayAvailableRooms() const {
-        cout << "\n====== AVAILABLE ROOMS ======\n";
-        bool found = false;
-        for (int i = 0; i < roomCount; i++) {
-            if (!rooms[i]->getIsOccupied()) {
-                rooms[i]->display();
-                cout << "---\n";
-                found = true;
+    // --- Object as argument (Week 3) ---
+    void findAndPrint(const Member& target) const {
+        for (int i = 0; i < count; i++) {
+            if (*members[i] == target) {    // uses overloaded ==
+                cout << "  Found: "; members[i]->display();
+                return;
             }
         }
-        if (!found) cout << "No available rooms!\n";
+        cout << "  Member not found.\n";
     }
 
-    // ---- Display All Guests ----
-    void displayAllGuests() const {
-        cout << "\n====== GUESTS (" << guestCount << " checked in) ======\n";
-        for (int i = 0; i < guestCount; i++) {
-            cout << *guests[i] << "\n";
-        }
-        cout << "Total Guest objects alive: " << Guest::getGuestCount() << "\n";
-    }
-
-    // ---- Display All Bookings ----
-    void displayAllBookings() const {
-        int total = Booking::getBookingCount();
-        cout << "\n====== BOOKINGS (" << total << " total) ======\n";
-        for (int i = 0; i < total; i++) {
-            if (bookings[i])
-                cout << *bookings[i] << "\n";
+    // --- Collect dues from all ---
+    void collectAllDues() {
+        cout << "\n  -- Collecting dues for all members --\n";
+        for (int i = 0; i < count; i++) {
+            // Cascaded calls (Week 3/4): resetDues().updateDues().payDues()
+            members[i]->resetDues().updateDues(members[i]->getDues()).payDues();
         }
     }
 
-    // ---- Read from files ----
-    void readGuestsFromFile() const {
-        ifstream file("guests.txt");
-        if (!file.is_open()) {
-            cout << "No guest records file found.\n";
-            return;
-        }
-        cout << "\n=== Guest Records from File ===\n";
-        string line;
-        while (getline(file, line)) {
-            cout << line << "\n";
-        }
-        file.close();
+    // --- Using -> operator explicitly (Week 5) ---
+    void arrowOperatorDemo(int index) const {
+        if (index < 0 || index >= count) return;
+        Member* ptr = members[index];       // raw pointer
+        cout << "\n  [Arrow -> Demo] Accessing via pointer:\n";
+        cout << "  Name via ptr->getName(): " << ptr->getName() << "\n";
+        cout << "  Age  via ptr->getAge() : " << ptr->getAge()  << "\n";
+        cout << "  Address: "; ptr->getAddress().display(); cout << "\n";
     }
 
-    void readBookingsFromFile() const {
-        ifstream file("bookings.txt");
-        if (!file.is_open()) {
-            cout << "No booking records file found.\n";
-            return;
+    // --- Operator overloading: += adds member dues (friend) ---
+    friend Society& operator+=(Society& soc, double amount);
+
+    // --- Display all ---
+    void displayAll() const {
+        cout << "\n  ========== " << societyName << " Members ==========\n";
+        cout << "  Total Members  : " << count << "\n";
+        cout << "  Total Persons  : " << Person::getTotalPersons() << "\n";
+        cout << "  Total Societies: " << totalSocieties << "\n\n";
+        for (int i = 0; i < count; i++) {
+            cout << "  " << *members[i] << "\n"; // uses friend operator<<
         }
-        cout << "\n=== Booking Records from File ===\n";
-        string line;
-        while (getline(file, line)) {
-            cout << line << "\n";
-        }
-        file.close();
+        cout << "  ==========================================\n";
     }
 
-    // ---- Clear old data files ----
-    static void clearDataFiles() {
-        ofstream("guests.txt",   ios::trunc).close();
-        ofstream("rooms.txt",    ios::trunc).close();
-        ofstream("bookings.txt", ios::trunc).close();
-        cout << "[Data files cleared]\n";
-    }
-
-    string getName() const { return hotelName; }
+    static int getTotalSocieties() { return totalSocieties; }
 };
 
-// ============================================================
-// WEEK 6 - CLO3: Standalone Friend Operator (non-member)
-// Compare two Hotel names with == as a free function
-// ============================================================
-bool hotelNamesMatch(const Hotel& a, const Hotel& b) {
-    return a.getName() == b.getName();
+int Society::totalSocieties = 0;
+
+// --- Friend operator for Society (Week 6) ---
+Society& operator+=(Society& soc, double amount) {
+    cout << "\n  [op+=] Increasing all dues by Rs." << amount << "\n";
+    for (int i = 0; i < soc.count; i++) {
+        *soc.members[i] += amount;  // uses Member::operator+=
+    }
+    return soc;
 }
 
+
 // ============================================================
-// MENU SYSTEM
+//  DEMONSTRATION FUNCTIONS
 // ============================================================
-void displayMenu() {
-    clearScreen();
-    cout << "   *** HOTEL MANAGEMENT SYSTEM ***\n";
-    clearScreen();
-    cout << "  1. Check In Guest\n";
-    cout << "  2. Check Out Guest\n";
-    cout << "  3. View All Rooms\n";
-    cout << "  4. View Available Rooms\n";
-    cout << "  5. View All Guests\n";
-    cout << "  6. View All Bookings\n";
-    cout << "  7. View Guest Records (from File)\n";
-    cout << "  8. View Booking Records (from File)\n";
-    cout << "  9. Demonstrate Operator Overloading (Week 6)\n";
-    cout << "  0. Exit\n";
-    clearScreen();
-    cout << "  Enter your choice: ";
+
+// --- Demonstrates shallow vs deep copy concept (Week 2) ---
+void shallowVsDeepDemo() {
+    cout << "\n============================================\n";
+    cout << "  DEMO: Shallow vs Deep Copy (Week 2)\n";
+    cout << "============================================\n";
+
+    Address a1("Green Avenue", 5);
+    Address a2 = a1;        // deep copy constructor called
+    a2.setStreet("Blue Road");
+    a2.setHouseNo(10);
+
+    cout << "  a1 (original): "; a1.display(); cout << "\n";
+    cout << "  a2 (copy mod): "; a2.display(); cout << "\n";
+    cout << "  => Deep copy: modifying a2 did NOT affect a1\n";
 }
 
-void demonstrateOperators() {
-    cout << "\n=== OPERATOR OVERLOADING DEMO (Week 6) ===\n\n";
-
-    // Create guests on stack
-    Guest g1(101, "Ali Hassan",   "12345-1234567-1", 201);
-    Guest g2(102, "Sara Khan",    "22345-2234567-2", 301);
-
-    // operator+=
-    g1 += 500.0f;
-    g1 += 200.0f;
-    cout << "\nAfter += 500 and += 200: " << g1 << "\n";
-
-    // operator=  (assignment)
-    Guest g3 = g1;
-    cout << "After copy via =: " << g3 << "\n";
-
-    // operator==
-    if (g1 == g3)
-        cout << "g1 == g3 : TRUE (same ID)\n";
-    if (!(g1 == g2))
-        cout << "g1 == g2 : FALSE (different IDs)\n";
-
-    // Room operators
-    Room r1(401, "Single", 1200.0f);
-    Room r2(402, "Suite",  6000.0f);
-
-    cout << "\n" << r1 << "\n";
-    cout << r2 << "\n";
-
-    if (r1 < r2)
-        cout << "Room " << r1.getNumber() << " is cheaper than Room " << r2.getNumber() << "\n";
-
-    cout << "\n[g1, g2 destructors will be called at end of this function]\n";
+// --- Demonstrates static members (Week 4) ---
+void staticMemberDemo() {
+    cout << "\n============================================\n";
+    cout << "  DEMO: Static Member (Week 4)\n";
+    cout << "============================================\n";
+    cout << "  Total Persons right now: " << Person::getTotalPersons() << "\n";
+    cout << "  Total Societies right now: " << Society::getTotalSocieties() << "\n";
 }
 
+// --- Demonstrates pointer arithmetic & address-of (Week 0/1) ---
+void pointerDemo() {
+    cout << "\n============================================\n";
+    cout << "  DEMO: Pointers & Dynamic Allocation (Week 0/5)\n";
+    cout << "============================================\n";
+
+    // Stack object
+    Member m1("Stack Ali", 30, "Johar Town", 7, 300.0);
+    cout << "  Stack object address (&m1): " << &m1 << "\n";
+
+    // Heap object with new (Week 5)
+    Member* m2 = new Member("Heap Usman", 25, "Model Town", 3, 450.0);
+    cout << "  Heap object address (m2)  : " << m2 << "\n";
+
+    // Arrow operator (Week 5)
+    cout << "  m2->getName()  : " << m2->getName() << "\n";
+    cout << "  m2->getMemberId(): " << m2->getMemberId() << "\n";
+
+    // de-allocate (Week 5)
+    delete m2;
+    m2 = nullptr;
+    cout << "  Heap object deleted, m2 = nullptr\n";
+}
+
+// --- Demonstrates operator overloading (Week 6) ---
+void operatorOverloadDemo() {
+    cout << "\n============================================\n";
+    cout << "  DEMO: Operator Overloading (Week 6)\n";
+    cout << "============================================\n";
+
+    Member* m1 = new Member("Sara", 28, "DHA", 12, 600.0);
+    Member* m2 = new Member("Bilal", 35, "Gulberg", 4, 600.0);
+
+    // operator<< (friend) - cascaded output
+    cout << "  m1: " << *m1 << "\n";
+    cout << "  m2: " << *m2 << "\n";
+
+    // operator== (member)
+    cout << "  m1 == m2 ? " << (*m1 == *m2 ? "Yes (same ID)" : "No (different ID)") << "\n";
+
+    // operator< (member)
+    cout << "  m1 < m2 (by dues)? " << (*m1 < *m2 ? "Yes" : "No") << "\n";
+
+    // operator+= (member) - cascaded
+    *m1 += 100;
+    cout << "  After m1 += 100: " << *m1 << "\n";
+
+    // Cascaded member function calls (Week 3/4)
+    cout << "\n  Cascaded calls: m1->resetDues().updateDues(800).payDues()\n";
+    m1->resetDues().updateDues(800).payDues();
+    cout << "  m1 after cascade: " << *m1 << "\n";
+
+    cout << "\n  [Week 6 Note] Restrictions on friend operator overloads:\n";
+    cout << "  - [] (subscript)  must be a member function\n";
+    cout << "  - () (call)       must be a member function\n";
+    cout << "  - -> (arrow)      must be a member function\n";
+    cout << "  - = (assignment)  must be a member function\n";
+    cout << "  These CANNOT be defined as friend functions.\n";
+
+    delete m1;
+    delete m2;
+}
+
+
 // ============================================================
-// MAIN FUNCTION
+//  MAIN FUNCTION
 // ============================================================
 int main() {
-    // Clear old data files at startup
-    Hotel::clearDataFiles();
+    cout << "====================================================\n";
+    cout << "     SOCIETY MANAGEMENT SYSTEM - OOP in C++        \n";
+    cout << "     Covers Week 0-6 | CLO1, CLO2, CLO3            \n";
+    cout << "====================================================\n\n";
 
-    // Create Hotel object on heap using new (Week 5)
-    Hotel* hotel = new Hotel("Grand Pearl Hotel");   // new operator - Week 5
+    // ---------------------------------------------------------
+    //  [Week 0] Pointer & Dynamic Memory Demo
+    // ---------------------------------------------------------
+    pointerDemo();
 
-    int choice = -1;
+    // ---------------------------------------------------------
+    //  [Week 2] Shallow vs Deep Copy Demo
+    // ---------------------------------------------------------
+    shallowVsDeepDemo();
 
-    while (choice != 0) {
-        displayMenu();
-        cin >> choice;
+    // ---------------------------------------------------------
+    //  [Week 1-5] Main Society Object - allocated on HEAP (Week 5)
+    // ---------------------------------------------------------
+    cout << "\n============================================\n";
+    cout << "  Creating Society on HEAP with new (Week 5)\n";
+    cout << "============================================\n";
 
-        if (choice == 1) {
-            // --- Check In ---
-            clearScreen();
-            cout << "=== CHECK IN GUEST ===\n";
+    Society* greenSociety = new Society("Green Valley Housing Society", 5);
 
-            int gId, roomNum, nights;
-            char name[100], cnic[25];
-            string checkIn, checkOut;
+    // addMember -> internally uses 'new' to allocate Member (Week 5)
+    greenSociety->addMember("Ahmed Khan",   34, "Block A, Street 3",  12, 1200.0);
+    greenSociety->addMember("Fatima Malik", 29, "Block B, Street 7",  5,  900.0);
+    greenSociety->addMember("Usman Raza",   42, "Block C, Street 1",  8,  1500.0);
+    greenSociety->addMember("Ayesha Noor",  25, "Block A, Street 9",  3,  800.0);
 
-            cout << "Guest ID     : "; cin >> gId;
-            cin.ignore();
-            cout << "Guest Name   : "; cin.getline(name, 100);
-            cout << "CNIC         : "; cin.getline(cnic, 25);
+    // Display using friend operator<< via displayAll
+    greenSociety->displayAll();
 
-            hotel->displayAvailableRooms();
-            cout << "Room Number  : "; cin >> roomNum;
-            cout << "Nights       : "; cin >> nights;
-            cin.ignore();
-            cout << "Check-In Date (e.g. 2025-01-01) : "; getline(cin, checkIn);
-            cout << "Check-Out Date                  : "; getline(cin, checkOut);
+    // ---------------------------------------------------------
+    //  [Week 3] Arrow operator demo
+    // ---------------------------------------------------------
+    greenSociety->arrowOperatorDemo(0);
 
-            hotel->checkIn(gId, name, cnic, roomNum, nights, checkIn, checkOut);
+    // ---------------------------------------------------------
+    //  [Week 3] Object as return type - getMemberCopy
+    // ---------------------------------------------------------
+    cout << "\n============================================\n";
+    cout << "  DEMO: Object as return type (Week 3)\n";
+    cout << "============================================\n";
+    Member copy = greenSociety->getMemberCopy(1); // copy constructor called
+    cout << "  Copied member info:\n";
+    copy.display();
 
-        } else if (choice == 2) {
-            // --- Check Out ---
-            clearScreen();
-            cout << "=== CHECK OUT GUEST ===\n";
-            int gId;
-            cout << "Enter Guest ID: "; cin >> gId;
-            hotel->checkOut(gId);
+    // ---------------------------------------------------------
+    //  [Week 3] Object as argument - findAndPrint
+    // ---------------------------------------------------------
+    cout << "\n============================================\n";
+    cout << "  DEMO: Object as argument (Week 3)\n";
+    cout << "============================================\n";
+    greenSociety->findAndPrint(copy);
 
-        } else if (choice == 3) {
-            hotel->displayAllRooms();
+    // ---------------------------------------------------------
+    //  [Week 3/4] Cascaded function calls
+    // ---------------------------------------------------------
+    cout << "\n============================================\n";
+    cout << "  DEMO: Cascaded Calls (Week 3/4)\n";
+    cout << "============================================\n";
+    greenSociety->collectAllDues();
 
-        } else if (choice == 4) {
-            hotel->displayAvailableRooms();
+    // ---------------------------------------------------------
+    //  [Week 4] Static members
+    // ---------------------------------------------------------
+    staticMemberDemo();
 
-        } else if (choice == 5) {
-            hotel->displayAllGuests();
+    // ---------------------------------------------------------
+    //  [Week 6] Operator Overloading demos
+    // ---------------------------------------------------------
+    operatorOverloadDemo();
 
-        } else if (choice == 6) {
-            hotel->displayAllBookings();
+    // ---------------------------------------------------------
+    //  [Week 6] Friend operator+= on Society (increase all dues)
+    // ---------------------------------------------------------
+    cout << "\n============================================\n";
+    cout << "  DEMO: Friend operator+= on Society (Week 6)\n";
+    cout << "============================================\n";
+    *greenSociety += 200.0;     // all members dues +200
+    greenSociety->displayAll();
 
-        } else if (choice == 7) {
-            hotel->readGuestsFromFile();
+    // ---------------------------------------------------------
+    //  [Week 5] Second society to demo multiple objects on heap
+    // ---------------------------------------------------------
+    cout << "\n============================================\n";
+    cout << "  Creating 2nd Society on heap (Week 5)\n";
+    cout << "============================================\n";
+    Society* blueSociety = new Society("Blue Horizon Apartments", 3);
+    blueSociety->addMember("Zara Iqbal",   22, "Tower A, Floor 3", 302, 2000.0);
+    blueSociety->addMember("Hamza Sheikh", 38, "Tower B, Floor 7", 701, 2500.0);
+    blueSociety->displayAll();
 
-        } else if (choice == 8) {
-            hotel->readBookingsFromFile();
+    staticMemberDemo();
 
-        } else if (choice == 9) {
-            demonstrateOperators();
+    // ---------------------------------------------------------
+    //  [Week 5] Cleanup with delete (Week 5)
+    // ---------------------------------------------------------
+    cout << "\n============================================\n";
+    cout << "  Cleanup: delete societies (Week 5)\n";
+    cout << "============================================\n";
 
-        } else if (choice == 0) {
-            cout << "\nThank you for using Hotel Management System!\n";
-            cout << "Saving and shutting down...\n";
+    delete greenSociety;    // calls ~Society -> delete[] members -> ~Member -> ~Person -> ~Address
+    greenSociety = nullptr;
 
-        } else {
-            cout << "Invalid choice! Try again.\n";
-        }
+    delete blueSociety;
+    blueSociety = nullptr;
 
-        if (choice != 0) pauseScreen();
-    }
+    cout << "\n============================================\n";
+    cout << "  After cleanup:\n";
+    cout << "  Total Persons remaining  : " << Person::getTotalPersons() << "\n";
+    cout << "  Total Societies remaining: " << Society::getTotalSocieties() << "\n";
+    cout << "============================================\n";
 
-    // delete hotel pointer - frees all dynamic memory (Week 5)
-    delete hotel;   // arrow operator used internally, destructor called here
+    cout << "\n====================================================\n";
+    cout << "     All OOP concepts demonstrated successfully!    \n";
+    cout << "====================================================\n";
 
-    cout << "\n[All memory freed. Program ended cleanly.]\n";
     return 0;
 }
+
+// ============================================================
+//  CONCEPT INDEX (Quick Reference)
+// ============================================================
+//
+//  Concept                         | Location in code
+//  --------------------------------|---------------------------
+//  Pointers & dynamic memory       | pointerDemo(), Society
+//  Struct -> Class migration       | Person, Member classes
+//  Encapsulation / Abstraction     | private members + accessors
+//  Protection (access modifiers)   | public/private in all classes
+//  Messaging (function calls)      | addMember, display, etc.
+//  Default constructor             | Address(), Person(), Member()
+//  Copy constructor (deep)         | Address(const Address&), Person(...)
+//  Destructor                      | ~Address, ~Person, ~Member, ~Society
+//  Assignment operator =           | Address::operator=, Person::operator=
+//  Address-of operator &           | &m1 in pointerDemo()
+//  Overloaded constructors         | Multiple ctors in each class
+//  Shallow vs Deep copy            | shallowVsDeepDemo()
+//  Initializer list                | Person(...) : age(a), address(...)
+//  Separate declaration/definition | (all methods defined outside class scope possible)
+//  Accessors / utility methods     | getters, setters, payDues()
+//  Object as argument              | findAndPrint(const Member&)
+//  Object as return type           | getMemberCopy() -> Member
+//  Cascaded calls                  | resetDues().updateDues().payDues()
+//  Static members                  | Person::totalPersons, Member::nextId
+//  Const members                   | SOCIETY_CODE in Member
+//  Object members                  | Address inside Person
+//  this pointer                    | Person::copyFrom(), operator=
+//  Arrow (->) operator             | ptr->getName(), ptr->getAge()
+//  new (heap allocation)           | new Member(...), new Society(...)
+//  delete (heap deallocation)      | delete members[i], delete m2
+//  Operator overload (member)      | ==, <, +=  in Member
+//  Operator overload (friend)      | operator<<, operator>>, operator+=Society
+//  Cascaded operator calls         | cout << m1 << m2, *this += ...
+//  Friend operator restrictions    | Note in operatorOverloadDemo()
+// ============================================================

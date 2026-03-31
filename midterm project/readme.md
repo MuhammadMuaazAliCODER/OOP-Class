@@ -4,6 +4,17 @@ A beginner-friendly Hotel Management System in C++ that covers **all OOP concept
 
 ---
 
+## 👨‍💻 Author
+
+| Field | Details |
+|-------|---------|
+| **Name** | Muhammad Muaaz Ali |
+| **Roll Number** | 2025-CS-708 |
+| **Language** | C++ |
+| **Project** | OOP — Hotel Management System |
+
+---
+
 ## 📚 Topics Covered (Week-by-Week)
 
 | Week | CLO | Topics Demonstrated in Code |
@@ -288,6 +299,8 @@ Files are written with `ofstream` (append mode) and read with `ifstream`.
 ---
 
 ## 👨‍💻 Author
-**OOP Project — Hotel Management System**  
+**Name:** Muhammad Muaaz Ali  
+**Roll Number:** 2025-CS-708  
+**Project:** OOP — Hotel Management System  
 Covers all CLO1, CLO2, CLO3 topics from Week 1–6  
 Language: **C++** | File: `main.cpp` (single file)
