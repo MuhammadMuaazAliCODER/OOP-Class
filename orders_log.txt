@@ -1,0 +1,23 @@
+=== FOOD DELIVERY SYSTEM - ORDER LOG ===
+
+=== Order #1 ===
+Biryani | Rs.450
+Burger | Rs.350
+Cold Drink | Rs.80
+Discount: 10%
+Total: Rs.792
+
+=== Order #2 ===
+Pizza | Rs.600
+Fries | Rs.150
+Discount: 5%
+Total: Rs.712.5
+
+=== Order #3 ===
+Biryani | Rs.450
+Burger | Rs.350
+Cold Drink | Rs.80
+Pizza | Rs.600
+Fries | Rs.150
+Total: Rs.1630
+
