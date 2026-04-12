@@ -6,152 +6,219 @@
 <title>C++ OOP Exam Prep</title>
 <style>
   :root {
-    --primary: #7F77DD;
-    --primary-light: #EEEDFE;
-    --primary-dark: #3C3489;
-    --accent: #1D9E75;
-    --accent-light: #E1F5EE;
-    --warn: #BA7517;
-    --warn-light: #FAEEDA;
-    --danger: #E24B4A;
-    --danger-light: #FCEBEB;
-    --success: #639922;
-    --success-light: #EAF3DE;
-    --bg: #f8f7ff;
-    --surface: #ffffff;
-    --border: rgba(127,119,221,0.2);
-    --text: #1a1a2e;
-    --text-muted: #6b6b8d;
+    --primary: #00b4d8;
+    --primary-light: #e0f7fa;
+    --primary-dark: #0077b6;
+    --accent: #f77f00;
+    --accent-light: #fff3e0;
+    --warn: #d4a017;
+    --warn-light: #fffbea;
+    --danger: #e63946;
+    --danger-light: #fff0f1;
+    --success: #2d9a4e;
+    --success-light: #eafaf1;
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --surface: #161b22;
+    --border: rgba(0,180,216,0.18);
+    --border2: rgba(255,255,255,0.07);
+    --text: #e6edf3;
+    --text-muted: #8b949e;
     --radius: 12px;
-    --shadow: 0 2px 12px rgba(127,119,221,0.1);
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
+  ::selection { background: rgba(0,180,216,0.3); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 3px; }
 
   /* NAV */
-  nav { background: var(--primary-dark); color: white; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(60,52,137,0.3); }
-  .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
-  .logo { font-size: 1.2rem; font-weight: 700; padding: 1rem 0; letter-spacing: -0.3px; }
-  .logo span { color: #AFA9EC; }
-  .nav-tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+  nav { background: rgba(13,17,23,0.95); backdrop-filter: blur(12px); color: white; padding: 0; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+  .nav-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
+  .logo { font-size: 1.15rem; font-weight: 800; padding: 1rem 0; letter-spacing: -0.5px; white-space: nowrap; }
+  .logo .c { color: var(--primary); }
+  .logo .pp { color: var(--accent); }
+  .nav-tabs { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
   .nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab { background: none; border: none; color: rgba(255,255,255,0.7); padding: 1rem 0.9rem; cursor: pointer; font-size: 0.82rem; font-weight: 500; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
-  .nav-tab:hover { color: white; background: rgba(255,255,255,0.07); }
-  .nav-tab.active { color: white; border-bottom-color: #AFA9EC; }
+  .nav-tab { background: none; border: none; color: var(--text-muted); padding: 1rem 0.85rem; cursor: pointer; font-size: 0.78rem; font-weight: 600; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-tab:hover { color: var(--primary); background: rgba(0,180,216,0.05); }
+  .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
 
   /* LAYOUT */
-  .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
   .page { display: none; }
   .page.active { display: block; }
 
   /* HERO */
-  .hero { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; padding: 3rem 1.5rem; text-align: center; }
-  .hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; margin-bottom: 0.5rem; }
-  .hero p { font-size: 1rem; opacity: 0.85; max-width: 600px; margin: 0 auto 1.5rem; }
-  .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; max-width: 900px; margin: 0 auto; text-align: left; }
-  .topic-chip { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem; }
-  .topic-chip:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
-  .topic-chip .num { background: rgba(255,255,255,0.25); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+  .hero { background: linear-gradient(135deg, #0d1117 0%, #0a2540 50%, #003554 100%); color: white; padding: 3.5rem 1.5rem; text-align: center; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 0%, rgba(0,180,216,0.12) 0%, transparent 70%); pointer-events: none; }
+  .hero h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 0.5rem; }
+  .hero h1 span { color: var(--primary); }
+  .hero p { font-size: 0.95rem; opacity: 0.75; max-width: 580px; margin: 0 auto 2rem; }
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.6rem; max-width: 950px; margin: 0 auto; text-align: left; }
+  .topic-chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(0,180,216,0.25); border-radius: 8px; padding: 0.6rem 0.9rem; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem; color: rgba(255,255,255,0.8); }
+  .topic-chip:hover { background: rgba(0,180,216,0.1); border-color: var(--primary); color: white; transform: translateY(-2px); }
+  .topic-chip .num { background: rgba(0,180,216,0.2); color: var(--primary); border-radius: 50%; width: 22px; height: 22px; min-width: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 800; }
 
   /* CARDS */
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+  .card { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+  .card:hover { border-color: rgba(0,180,216,0.2); }
   .card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
-  .card-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-  .card h2 { font-size: 1.15rem; font-weight: 700; color: var(--primary-dark); }
-  .card h3 { font-size: 1rem; font-weight: 600; color: var(--primary-dark); margin: 1rem 0 0.5rem; }
-  .card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem; }
-  .card ul, .card ol { padding-left: 1.3rem; font-size: 0.9rem; color: var(--text); margin-bottom: 0.75rem; }
-  .card li { margin-bottom: 0.3rem; }
+  .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .card h2 { font-size: 1.15rem; font-weight: 700; color: var(--primary); }
+  .card h3 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin: 1.2rem 0 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border2); }
+  .card p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+  .card ul, .card ol { padding-left: 1.3rem; font-size: 0.88rem; color: var(--text); margin-bottom: 0.75rem; }
+  .card li { margin-bottom: 0.35rem; color: var(--text-muted); }
+  .card li strong { color: var(--text); }
 
   /* CODE */
-  pre { background: #1e1e3f; color: #abb2bf; border-radius: 8px; padding: 1rem 1.25rem; overflow-x: auto; font-size: 0.8rem; line-height: 1.7; margin: 0.75rem 0; border: 1px solid rgba(127,119,221,0.2); }
-  code { font-family: 'Cascadia Code', 'Fira Code', monospace; }
+  pre { background: #0d1117; color: #c9d1d9; border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; font-size: 0.79rem; line-height: 1.75; margin: 0.75rem 0; border: 1px solid rgba(0,180,216,0.15); position: relative; }
+  code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; }
   pre code { color: inherit; background: none; }
-  .kw { color: #c678dd; }
-  .ty { color: #e5c07b; }
-  .fn { color: #61afef; }
-  .st { color: #98c379; }
-  .cm { color: #5c6370; font-style: italic; }
-  .nm { color: #e06c75; }
-  .op { color: #56b6c2; }
+  .kw { color: #ff7b72; }
+  .ty { color: #ffa657; }
+  .fn { color: #79c0ff; }
+  .st { color: #a5d6ff; }
+  .cm { color: #484f58; font-style: italic; }
+  .nm { color: #79c0ff; }
+  .op { color: #ff7b72; }
 
   /* BADGES */
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
-  .badge-primary { background: var(--primary-light); color: var(--primary-dark); }
-  .badge-success { background: var(--success-light); color: #27500A; }
-  .badge-warn { background: var(--warn-light); color: #633806; }
-  .badge-danger { background: var(--danger-light); color: #791F1F; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3px; }
+  .badge-primary { background: rgba(0,180,216,0.15); color: var(--primary); border: 1px solid rgba(0,180,216,0.3); }
+  .badge-success { background: rgba(45,154,78,0.15); color: #3fb968; border: 1px solid rgba(45,154,78,0.3); }
+  .badge-warn { background: rgba(212,160,23,0.15); color: #f0b429; border: 1px solid rgba(212,160,23,0.3); }
+  .badge-danger { background: rgba(230,57,70,0.15); color: #ff6b6b; border: 1px solid rgba(230,57,70,0.3); }
+  .badge-accent { background: rgba(247,127,0,0.15); color: var(--accent); border: 1px solid rgba(247,127,0,0.3); }
 
   /* SECTION DIVIDER */
-  .section-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--primary); margin: 2rem 0 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section-label { font-size: 0.68rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin: 2rem 0 1rem; display: flex; align-items: center; gap: 0.75rem; }
   .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   /* QUIZ */
-  .quiz-q { background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-bottom: 1rem; }
-  .quiz-q .q-text { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .quiz-q { background: var(--bg2); border: 1px solid var(--border2); border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 1rem; }
+  .quiz-q .q-num { font-size: 0.68rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .quiz-q .q-text { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.9rem; color: var(--text); }
   .quiz-options { display: flex; flex-direction: column; gap: 0.4rem; }
-  .quiz-opt { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-align: left; }
-  .quiz-opt:hover { border-color: var(--primary); background: #faf9ff; }
-  .quiz-opt.correct { background: var(--success-light); border-color: var(--success); color: #27500A; }
-  .quiz-opt.wrong { background: var(--danger-light); border-color: var(--danger); color: #791F1F; }
-  .quiz-opt.reveal { background: var(--success-light); border-color: var(--success); color: #27500A; }
-  .quiz-opt:disabled { cursor: default; }
-  .explanation { background: #f0f4ff; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.82rem; margin-top: 0.75rem; color: var(--text); border: 1px solid rgba(127,119,221,0.15); display: none; }
-  .quiz-score { background: var(--primary-dark); color: white; border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-bottom: 1rem; }
-  .quiz-score .big { font-size: 2.5rem; font-weight: 700; }
-  .btn { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--primary); color: white; border: none; border-radius: 8px; padding: 0.6rem 1.2rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-  .btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+  .quiz-opt { background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.83rem; cursor: pointer; transition: all 0.15s; text-align: left; color: var(--text-muted); }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--text); background: rgba(0,180,216,0.05); }
+  .quiz-opt.correct { background: rgba(45,154,78,0.15); border-color: #3fb968; color: #3fb968 !important; }
+  .quiz-opt.wrong { background: rgba(230,57,70,0.15); border-color: #ff6b6b; color: #ff6b6b !important; }
+  .quiz-opt.reveal { background: rgba(45,154,78,0.1); border-color: #3fb968; color: #3fb968 !important; }
+  .explanation { background: rgba(0,180,216,0.06); border: 1px solid rgba(0,180,216,0.2); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.81rem; margin-top: 0.75rem; color: var(--text-muted); display: none; }
+  .quiz-score { background: linear-gradient(135deg, #0a2540, #003554); border: 1px solid rgba(0,180,216,0.3); border-radius: var(--radius); padding: 2rem; text-align: center; margin-bottom: 1.5rem; }
+  .quiz-score .big { font-size: 3rem; font-weight: 800; color: var(--primary); }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--primary); color: #0d1117; border: none; border-radius: 8px; padding: 0.6rem 1.2rem; font-size: 0.83rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .btn:hover { background: #00cfee; transform: translateY(-1px); }
   .btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
-  .btn-outline:hover { background: var(--primary-light); transform: translateY(-1px); }
-  .btn-sm { padding: 0.4rem 0.85rem; font-size: 0.78rem; }
+  .btn-outline:hover { background: rgba(0,180,216,0.1); }
+  .btn-accent { background: var(--accent); color: white; }
+  .btn-accent:hover { background: #ff9a2e; }
+  .btn-sm { padding: 0.35rem 0.8rem; font-size: 0.76rem; }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #38b863; }
 
   /* TABLE */
-  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0; }
-  th { background: var(--primary-light); color: var(--primary-dark); padding: 0.6rem 0.9rem; text-align: left; font-weight: 700; border-bottom: 2px solid var(--border); }
-  td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin: 0.75rem 0; }
+  th { background: rgba(0,180,216,0.1); color: var(--primary); padding: 0.6rem 0.9rem; text-align: left; font-weight: 700; border-bottom: 1px solid var(--border); font-size: 0.75rem; letter-spacing: 0.3px; }
+  td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border2); color: var(--text-muted); vertical-align: top; }
+  td strong { color: var(--text); }
   tr:last-child td { border-bottom: none; }
-  tr:nth-child(even) td { background: #faf9ff; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
 
   /* ACCORDION */
-  .accordion { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
-  .acc-header { background: white; padding: 1rem 1.25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.92rem; transition: background 0.2s; }
-  .acc-header:hover { background: var(--primary-light); }
-  .acc-arrow { transition: transform 0.3s; color: var(--primary); font-size: 1rem; }
-  .acc-body { display: none; padding: 0 1.25rem 1.25rem; background: white; }
+  .accordion { border: 1px solid var(--border2); border-radius: 10px; overflow: hidden; margin-bottom: 0.75rem; }
+  .acc-header { background: var(--bg2); padding: 0.9rem 1.1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.88rem; transition: background 0.2s; color: var(--text); }
+  .acc-header:hover { background: var(--bg3); }
+  .acc-arrow { transition: transform 0.3s; color: var(--primary); font-size: 0.8rem; }
+  .acc-body { display: none; padding: 0 1.1rem 1.1rem; background: var(--bg2); }
   .accordion.open .acc-arrow { transform: rotate(180deg); }
   .accordion.open .acc-body { display: block; }
 
-  /* FOOTER */
-  footer { background: var(--primary-dark); color: rgba(255,255,255,0.7); text-align: center; padding: 1.5rem; font-size: 0.82rem; margin-top: 3rem; }
-  footer strong { color: #AFA9EC; }
-
-  /* PROGRESS */
-  .progress-bar { background: rgba(127,119,221,0.15); border-radius: 20px; height: 6px; margin: 0.5rem 0; }
-  .progress-fill { background: var(--primary); height: 100%; border-radius: 20px; transition: width 0.4s; }
-
-  /* RESPONSIVE */
-  @media (max-width: 640px) {
-    .nav-tabs { padding: 0 0.5rem; }
-    .nav-tab { padding: 0.9rem 0.6rem; font-size: 0.75rem; }
-    .container { padding: 1.5rem 1rem; }
-    .topic-grid { grid-template-columns: 1fr 1fr; }
-  }
-  
-  /* HIGHLIGHT BOX */
-  .info-box { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.85rem; }
-  .warn-box { background: var(--warn-light); border-left: 4px solid var(--warn); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.85rem; }
-  .danger-box { background: var(--danger-light); border-left: 4px solid var(--danger); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.85rem; }
+  /* INFO BOXES */
+  .info-box { background: rgba(0,180,216,0.07); border-left: 3px solid var(--primary); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.83rem; color: var(--text-muted); }
+  .warn-box { background: rgba(212,160,23,0.07); border-left: 3px solid var(--warn); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.83rem; color: var(--text-muted); }
+  .danger-box { background: rgba(230,57,70,0.07); border-left: 3px solid var(--danger); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.83rem; color: var(--text-muted); }
+  .success-box { background: rgba(45,154,78,0.07); border-left: 3px solid var(--success); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin: 0.75rem 0; font-size: 0.83rem; color: var(--text-muted); }
 
   /* TWO-COL */
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0.75rem 0; }
   @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* COMPLETE THE CODE */
+  .complete-task { background: var(--bg2); border: 1px solid rgba(247,127,0,0.2); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem; }
+  .complete-task .task-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: gap; gap: 0.5rem; }
+  .complete-task .task-title { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+  .complete-task .task-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+  .blank { display: inline-block; background: rgba(247,127,0,0.12); border: 1px dashed var(--accent); border-radius: 4px; min-width: 100px; padding: 1px 8px; color: var(--accent); font-family: 'Cascadia Code','Fira Code',monospace; cursor: text; }
+  .fill-area { background: #0d1117; border: 1px solid rgba(247,127,0,0.2); border-radius: 10px; padding: 1rem 1.25rem; font-size: 0.79rem; line-height: 1.75; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; position: relative; margin: 0.5rem 0; }
+  .fill-input { background: rgba(247,127,0,0.12); border: 1px dashed var(--accent); border-radius: 4px; color: var(--accent); font-family: inherit; font-size: inherit; padding: 1px 6px; min-width: 80px; width: auto; outline: none; }
+  .fill-input:focus { border-color: var(--accent); background: rgba(247,127,0,0.18); }
+  .fill-input.correct-fill { background: rgba(45,154,78,0.15); border-color: #3fb968; color: #3fb968; }
+  .fill-input.wrong-fill { background: rgba(230,57,70,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+  .task-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+  .task-feedback { font-size: 0.8rem; margin-top: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 6px; display: none; }
+  .task-feedback.show { display: block; }
+  .task-feedback.ok { background: rgba(45,154,78,0.1); color: #3fb968; border: 1px solid rgba(45,154,78,0.3); }
+  .task-feedback.fail { background: rgba(230,57,70,0.1); color: #ff6b6b; border: 1px solid rgba(230,57,70,0.3); }
+
+  /* ERROR FINDING */
+  .error-task { background: var(--bg2); border: 1px solid rgba(230,57,70,0.2); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem; }
+  .error-task .etask-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+  .error-task .etask-title { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+  .error-task .etask-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+  .buggy-code { background: #0d1117; border: 1px solid rgba(230,57,70,0.25); border-radius: 10px; padding: 1rem 1.25rem; font-size: 0.79rem; line-height: 1.75; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; color: #c9d1d9; margin: 0.5rem 0; overflow-x: auto; }
+  .bug-line { background: rgba(230,57,70,0.12); border-left: 3px solid var(--danger); display: block; margin: 0 -1.25rem; padding: 0 1.25rem; color: #ff6b6b; }
+  .error-answer { margin-top: 0.75rem; }
+  .error-options { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0; }
+  .error-opt { background: var(--bg3); border: 1px solid var(--border2); border-radius: 7px; padding: 0.5rem 0.9rem; font-size: 0.82rem; cursor: pointer; text-align: left; color: var(--text-muted); transition: all 0.15s; }
+  .error-opt:hover { border-color: var(--danger); color: var(--text); }
+  .error-opt.correct { background: rgba(45,154,78,0.15); border-color: #3fb968; color: #3fb968 !important; }
+  .error-opt.wrong { background: rgba(230,57,70,0.15); border-color: #ff6b6b; color: #ff6b6b !important; }
+  .error-opt.reveal-err { background: rgba(45,154,78,0.1); border-color: #3fb968; color: #3fb968 !important; }
+  .fix-reveal { background: rgba(0,180,216,0.06); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; font-size: 0.81rem; color: var(--text-muted); display: none; }
+  .fix-reveal.show { display: block; }
+  .fix-reveal code { color: #3fb968; font-family: 'Cascadia Code','Fira Code',monospace; }
+
+  /* FOOTER */
+  footer { background: var(--bg2); border-top: 1px solid var(--border); color: var(--text-muted); text-align: center; padding: 1.75rem; font-size: 0.8rem; margin-top: 3rem; }
+  footer .heart { color: var(--danger); }
+  footer strong { color: var(--primary); }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .nav-tabs { padding: 0; }
+    .nav-tab { padding: 0.85rem 0.6rem; font-size: 0.72rem; }
+    .container { padding: 1.25rem 1rem; }
+    .topic-grid { grid-template-columns: 1fr 1fr; }
+    pre { font-size: 0.74rem; }
+  }
+
+  /* HOME QUICK CARDS */
+  .quick-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .quick-card { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.25rem; cursor: pointer; transition: all 0.2s; }
+  .quick-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .quick-card .qc-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .quick-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+  .quick-card p { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.6rem; }
+
+  /* SCORE CIRCLE */
+  .score-circle { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; margin: 0 auto 1rem; border: 4px solid var(--primary); color: var(--primary); }
 </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <div class="logo">C<span>++</span> OOP</div>
+    <div class="logo"><span class="c">C</span><span class="pp">++</span> OOP Prep</div>
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="showPage('home')">Home</button>
       <button class="nav-tab" onclick="showPage('basics')">Basics</button>
@@ -162,6 +229,8 @@
       <button class="nav-tab" onclick="showPage('operators')">Operators</button>
       <button class="nav-tab" onclick="showPage('static')">Static</button>
       <button class="nav-tab" onclick="showPage('tracing')">Tracing</button>
+      <button class="nav-tab" onclick="showPage('complete')">Complete Code</button>
+      <button class="nav-tab" onclick="showPage('errors')">Find Errors</button>
       <button class="nav-tab" onclick="showPage('quiz')">Quiz</button>
     </div>
   </div>
@@ -170,46 +239,58 @@
 <!-- HOME -->
 <div id="page-home" class="page active">
   <div class="hero">
-    <h1>C++ OOP Exam Prep</h1>
-    <p>Complete study guide covering all exam topics with theory, code examples, and practice questions</p>
+    <h1>C++ OOP <span>Exam Prep</span></h1>
+    <p>Complete study guide — theory, code examples, complete-the-code challenges, error finding, and practice quiz</p>
     <div class="topic-grid">
-      <div class="topic-chip" onclick="showPage('basics')"><span class="num">1</span>Class & Object Basics</div>
-      <div class="topic-chip" onclick="showPage('constructors')"><span class="num">2</span>Constructors & Copy</div>
-      <div class="topic-chip" onclick="showPage('memory')"><span class="num">3</span>Destructor & Dynamic Memory</div>
+      <div class="topic-chip" onclick="showPage('basics')"><span class="num">1</span>Class &amp; Object Basics</div>
+      <div class="topic-chip" onclick="showPage('constructors')"><span class="num">2</span>Constructors &amp; Copy</div>
+      <div class="topic-chip" onclick="showPage('memory')"><span class="num">3</span>Destructor &amp; Dynamic Memory</div>
       <div class="topic-chip" onclick="showPage('encapsulation')"><span class="num">4</span>Encapsulation</div>
       <div class="topic-chip" onclick="showPage('constructors')"><span class="num">5</span>Initializer Lists</div>
-      <div class="topic-chip" onclick="showPage('functions')"><span class="num">6</span>Member & Friend Functions</div>
-      <div class="topic-chip" onclick="showPage('tracing')"><span class="num">7</span>Syntax & Tracing</div>
+      <div class="topic-chip" onclick="showPage('functions')"><span class="num">6</span>Member &amp; Friend Functions</div>
+      <div class="topic-chip" onclick="showPage('tracing')"><span class="num">7</span>Tracing &amp; Error Fixing</div>
       <div class="topic-chip" onclick="showPage('functions')"><span class="num">8</span>Pass by Value/Reference</div>
       <div class="topic-chip" onclick="showPage('operators')"><span class="num">9</span>Operator Overloading</div>
       <div class="topic-chip" onclick="showPage('static')"><span class="num">10</span>Static Variables/Functions</div>
     </div>
   </div>
   <div class="container">
-    <div class="section-label">Quick access</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem">
-      <div class="card" style="cursor:pointer;border-color:var(--primary)" onclick="showPage('quiz')">
-        <div style="font-size:2rem;margin-bottom:0.5rem">🧠</div>
+    <div class="section-label">Quick Access</div>
+    <div class="quick-cards">
+      <div class="quick-card" onclick="showPage('quiz')">
+        <div class="qc-icon">🧠</div>
         <h3>Practice Quiz</h3>
-        <p>Test your knowledge with 20+ MCQs covering all topics</p>
+        <p>20 MCQs covering all topics with explanations</p>
         <span class="badge badge-primary">20 Questions</span>
       </div>
-      <div class="card" style="cursor:pointer" onclick="showPage('operators')">
-        <div style="font-size:2rem;margin-bottom:0.5rem">⚙️</div>
+      <div class="quick-card" onclick="showPage('complete')">
+        <div class="qc-icon">✏️</div>
+        <h3>Complete the Code</h3>
+        <p>Fill in the blanks — interactive exercises</p>
+        <span class="badge badge-accent">12 Tasks</span>
+      </div>
+      <div class="quick-card" onclick="showPage('errors')">
+        <div class="qc-icon">🐛</div>
+        <h3>Find the Error</h3>
+        <p>Spot bugs and fix broken C++ code</p>
+        <span class="badge badge-danger">10 Challenges</span>
+      </div>
+      <div class="quick-card" onclick="showPage('operators')">
+        <div class="qc-icon">⚙️</div>
         <h3>Operator Overloading</h3>
-        <p>Full coverage of +, -, ==, !=, ++, =, &lt;&lt;</p>
+        <p>Full detail: +, -, ==, !=, ++, =, &lt;&lt;</p>
         <span class="badge badge-warn">High Priority</span>
       </div>
-      <div class="card" style="cursor:pointer" onclick="showPage('tracing')">
-        <div style="font-size:2rem;margin-bottom:0.5rem">🔍</div>
-        <h3>Tracing Output</h3>
-        <p>Constructor/destructor call order practice</p>
+      <div class="quick-card" onclick="showPage('tracing')">
+        <div class="qc-icon">🔍</div>
+        <h3>Output Tracing</h3>
+        <p>Constructor/destructor call order</p>
         <span class="badge badge-success">Practice</span>
       </div>
-      <div class="card" style="cursor:pointer" onclick="showPage('memory')">
-        <div style="font-size:2rem;margin-bottom:0.5rem">💾</div>
-        <h3>Shallow vs Deep Copy</h3>
-        <p>Visual explanation with code examples</p>
+      <div class="quick-card" onclick="showPage('memory')">
+        <div class="qc-icon">💾</div>
+        <h3>Deep vs Shallow Copy</h3>
+        <p>Dynamic memory explained with code</p>
         <span class="badge badge-danger">Tricky</span>
       </div>
     </div>
@@ -222,82 +303,56 @@
   <div class="section-label">Topic 1</div>
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:var(--primary-light)">📦</div>
+      <div class="card-icon" style="background:rgba(0,180,216,0.12)">📦</div>
       <h2>Basics of Class and Object</h2>
     </div>
-    <p>A <strong>class</strong> is a blueprint/template. An <strong>object</strong> is an instance of a class.</p>
+    <p>A <strong>class</strong> is a blueprint/template. An <strong>object</strong> is an instance of a class created from that blueprint.</p>
     <div class="two-col">
       <div>
         <h3>Key Terms</h3>
         <ul>
-          <li><strong>Class</strong>: User-defined data type</li>
-          <li><strong>Object</strong>: Instance of a class</li>
-          <li><strong>Data members</strong>: Variables inside class</li>
-          <li><strong>Member functions</strong>: Functions inside class</li>
-          <li><strong>Access specifiers</strong>: public, private, protected</li>
+          <li><strong>Class</strong> — User-defined data type</li>
+          <li><strong>Object</strong> — Instance of a class</li>
+          <li><strong>Data members</strong> — Variables inside class</li>
+          <li><strong>Member functions</strong> — Functions inside class</li>
+          <li><strong>Access specifiers</strong> — public, private, protected</li>
+          <li><strong>this pointer</strong> — Points to current object</li>
         </ul>
       </div>
       <div>
         <h3>Access Specifiers</h3>
         <table>
           <tr><th>Specifier</th><th>Accessible From</th></tr>
-          <tr><td>public</td><td>Anywhere</td></tr>
-          <tr><td>private</td><td>Same class only</td></tr>
-          <tr><td>protected</td><td>Class + subclasses</td></tr>
+          <tr><td><strong>public</strong></td><td>Anywhere</td></tr>
+          <tr><td><strong>private</strong></td><td>Same class only</td></tr>
+          <tr><td><strong>protected</strong></td><td>Class + subclasses</td></tr>
         </table>
       </div>
     </div>
     <h3>Basic Class Syntax</h3>
 <pre><code><span class="kw">class</span> <span class="ty">Student</span> {
 <span class="kw">private</span>:
-    <span class="ty">string</span> name;    <span class="cm">// data member</span>
+    <span class="ty">string</span> name;
     <span class="ty">int</span> age;
 
 <span class="kw">public</span>:
-    <span class="cm">// Member function</span>
     <span class="ty">void</span> <span class="fn">setName</span>(<span class="ty">string</span> n) { name = n; }
-    <span class="ty">string</span> <span class="fn">getName</span>() { <span class="kw">return</span> name; }
+    <span class="ty">string</span> <span class="fn">getName</span>()        { <span class="kw">return</span> name; }
     <span class="ty">void</span> <span class="fn">display</span>() {
-        cout &lt;&lt; <span class="st">"Name: "</span> &lt;&lt; name &lt;&lt; <span class="st">", Age: "</span> &lt;&lt; age &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">"Name: "</span> &lt;&lt; name &lt;&lt; <span class="st">", Age: "</span> &lt;&lt; age;
     }
 };
 
 <span class="ty">int</span> <span class="fn">main</span>() {
-    <span class="ty">Student</span> s1;           <span class="cm">// object creation</span>
+    <span class="ty">Student</span> s1;              <span class="cm">// stack object</span>
     s1.<span class="fn">setName</span>(<span class="st">"Ali"</span>);
     s1.<span class="fn">display</span>();
-    
-    <span class="ty">Student</span>* ptr = <span class="kw">new</span> <span class="ty">Student</span>(); <span class="cm">// dynamic object</span>
+
+    <span class="ty">Student</span>* ptr = <span class="kw">new</span> <span class="ty">Student</span>(); <span class="cm">// heap object</span>
     ptr-><span class="fn">setName</span>(<span class="st">"Sara"</span>);
     <span class="kw">delete</span> ptr;
 }</code></pre>
-    <h3>this Pointer</h3>
-    <p>The <code>this</code> pointer points to the current object. Used to disambiguate member variables from parameters.</p>
-<pre><code><span class="kw">class</span> <span class="ty">Box</span> {
-    <span class="ty">int</span> width;
-<span class="kw">public</span>:
-    <span class="ty">void</span> <span class="fn">setWidth</span>(<span class="ty">int</span> width) {
-        <span class="kw">this</span>->width = width; <span class="cm">// this->width = member, width = parameter</span>
-    }
-};</code></pre>
-    <div class="warn-box">⚠️ Default access in class is <strong>private</strong>. In struct, it's <strong>public</strong>.</div>
-  </div>
-  
-  <div class="card">
-    <h3>Practice Questions</h3>
-    <div class="quiz-q">
-      <div class="q-text">Q1. Write a class <code>Rectangle</code> with private length and width, public setters, getters, and an area() function.</div>
-    </div>
-<pre><code><span class="kw">class</span> <span class="ty">Rectangle</span> {
-<span class="kw">private</span>:
-    <span class="ty">double</span> length, width;
-<span class="kw">public</span>:
-    <span class="ty">void</span> <span class="fn">setLength</span>(<span class="ty">double</span> l) { length = l; }
-    <span class="ty">void</span> <span class="fn">setWidth</span>(<span class="ty">double</span> w) { width = w; }
-    <span class="ty">double</span> <span class="fn">getLength</span>() { <span class="kw">return</span> length; }
-    <span class="ty">double</span> <span class="fn">getWidth</span>() { <span class="kw">return</span> width; }
-    <span class="ty">double</span> <span class="fn">area</span>() { <span class="kw">return</span> length * width; }
-};</code></pre>
+    <div class="warn-box">⚠️ Default access in <code>class</code> is <strong>private</strong>. In <code>struct</code>, it's <strong>public</strong>.</div>
   </div>
 </div>
 </div>
@@ -308,101 +363,68 @@
   <div class="section-label">Topics 2 &amp; 5</div>
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:var(--warn-light)">🔧</div>
+      <div class="card-icon" style="background:rgba(247,127,0,0.12)">🔧</div>
       <h2>Constructors, Copy &amp; Initializer Lists</h2>
     </div>
-    <p>A constructor is a special function called automatically when an object is created. Same name as class, no return type.</p>
-    
-    <h3>Types of Constructors</h3>
     <table>
       <tr><th>Type</th><th>Parameters</th><th>When Called</th></tr>
-      <tr><td>Default</td><td>None</td><td>Student s;</td></tr>
-      <tr><td>Parameterized</td><td>One or more</td><td>Student s("Ali", 20);</td></tr>
-      <tr><td>Copy</td><td>const ClassName&amp;</td><td>Student s2 = s1;</td></tr>
+      <tr><td><strong>Default</strong></td><td>None</td><td>Student s;</td></tr>
+      <tr><td><strong>Parameterized</strong></td><td>One or more</td><td>Student s("Ali", 20);</td></tr>
+      <tr><td><strong>Copy</strong></td><td>const ClassName&amp;</td><td>Student s2 = s1;</td></tr>
     </table>
-
 <pre><code><span class="kw">class</span> <span class="ty">Student</span> {
 <span class="kw">private</span>:
     <span class="ty">string</span> name;
     <span class="ty">int</span> age;
 <span class="kw">public</span>:
-    <span class="cm">// Default Constructor</span>
-    <span class="fn">Student</span>() {
-        name = <span class="st">"Unknown"</span>;
-        age = <span class="nm">0</span>;
-        cout &lt;&lt; <span class="st">"Default constructor called\n"</span>;
+    <span class="cm">// 1. Default Constructor</span>
+    <span class="fn">Student</span>() : name(<span class="st">"Unknown"</span>), age(<span class="nm">0</span>) {
+        cout &lt;&lt; <span class="st">"Default ctor\n"</span>;
     }
-    
-    <span class="cm">// Parameterized Constructor</span>
-    <span class="fn">Student</span>(<span class="ty">string</span> n, <span class="ty">int</span> a) {
-        name = n;
-        age = a;
-        cout &lt;&lt; <span class="st">"Parameterized constructor called\n"</span>;
+    <span class="cm">// 2. Parameterized Constructor</span>
+    <span class="fn">Student</span>(<span class="ty">string</span> n, <span class="ty">int</span> a) : name(n), age(a) {
+        cout &lt;&lt; <span class="st">"Parameterized ctor\n"</span>;
     }
-    
-    <span class="cm">// Copy Constructor</span>
-    <span class="fn">Student</span>(<span class="kw">const</span> <span class="ty">Student</span>&amp; other) {
-        name = other.name;
-        age = other.age;
-        cout &lt;&lt; <span class="st">"Copy constructor called\n"</span>;
+    <span class="cm">// 3. Copy Constructor — MUST be const reference</span>
+    <span class="fn">Student</span>(<span class="kw">const</span> <span class="ty">Student</span>&amp; other) : name(other.name), age(other.age) {
+        cout &lt;&lt; <span class="st">"Copy ctor\n"</span>;
     }
-    
     <span class="ty">void</span> <span class="fn">display</span>() { cout &lt;&lt; name &lt;&lt; <span class="st">" "</span> &lt;&lt; age &lt;&lt; endl; }
-};
-
-<span class="ty">int</span> <span class="fn">main</span>() {
-    <span class="ty">Student</span> s1;                 <span class="cm">// Default</span>
-    <span class="ty">Student</span> s2(<span class="st">"Ali"</span>, <span class="nm">20</span>);      <span class="cm">// Parameterized</span>
-    <span class="ty">Student</span> s3(s2);             <span class="cm">// Copy</span>
-    <span class="ty">Student</span> s4 = s2;            <span class="cm">// Also copy constructor!</span>
-}</code></pre>
-
+};</code></pre>
     <h3>Initializer Lists</h3>
-    <div class="info-box">✅ Preferred way to initialize members — more efficient, required for <code>const</code> and reference members.</div>
+    <div class="info-box">✅ More efficient than assignment in body. <strong>Required</strong> for <code>const</code> members and references.</div>
 <pre><code><span class="kw">class</span> <span class="ty">Point</span> {
-<span class="kw">private</span>:
     <span class="ty">int</span> x, y;
-    <span class="kw">const</span> <span class="ty">int</span> ID; <span class="cm">// must use initializer list!</span>
+    <span class="kw">const</span> <span class="ty">int</span> ID;  <span class="cm">// const — MUST use initializer list</span>
 <span class="kw">public</span>:
-    <span class="cm">// Initializer list syntax: constructor() : member(value) {}</span>
-    <span class="fn">Point</span>(<span class="ty">int</span> x, <span class="ty">int</span> y, <span class="ty">int</span> id) : x(x), y(y), ID(id) {
-        <span class="cm">// body can be empty or do additional work</span>
-    }
-    
-    <span class="ty">void</span> <span class="fn">display</span>() { cout &lt;&lt; <span class="st">"("</span> &lt;&lt; x &lt;&lt; <span class="st">","</span> &lt;&lt; y &lt;&lt; <span class="st">")"</span> &lt;&lt; endl; }
+    <span class="fn">Point</span>(<span class="ty">int</span> x, <span class="ty">int</span> y, <span class="ty">int</span> id) : x(x), y(y), ID(id) {}
+    <span class="cm">//                              ↑ initializer list syntax</span>
 };</code></pre>
-
     <h3>Shallow vs Deep Copy</h3>
-    <div class="danger-box">⚠️ Shallow copy copies pointer addresses — both objects share the same memory → CRASH on double delete!</div>
-<pre><code><span class="cm">// SHALLOW COPY (problematic with dynamic memory)</span>
-<span class="kw">class</span> <span class="ty">ShallowDemo</span> {
+    <div class="danger-box">⚠️ Shallow copy copies the pointer address — both objects share the same memory → double-delete CRASH!</div>
+<pre><code><span class="cm">// ❌ SHALLOW — dangerous with dynamic memory</span>
+<span class="kw">class</span> <span class="ty">Shallow</span> {
 <span class="kw">public</span>:
     <span class="ty">int</span>* data;
-    <span class="fn">ShallowDemo</span>(<span class="ty">int</span> val) { data = <span class="kw">new</span> <span class="ty">int</span>(val); }
-    <span class="cm">// Default copy constructor does shallow copy</span>
-    <span class="cm">// Both objects point to SAME memory — DANGEROUS</span>
+    <span class="fn">Shallow</span>(<span class="ty">int</span> v) { data = <span class="kw">new</span> <span class="ty">int</span>(v); }
+    <span class="cm">// compiler-generated copy: copies the pointer address only</span>
 };
 
-<span class="cm">// DEEP COPY (correct solution)</span>
-<span class="kw">class</span> <span class="ty">DeepDemo</span> {
+<span class="cm">// ✅ DEEP — correct solution</span>
+<span class="kw">class</span> <span class="ty">Deep</span> {
 <span class="kw">public</span>:
     <span class="ty">int</span>* data;
-    <span class="fn">DeepDemo</span>(<span class="ty">int</span> val) { data = <span class="kw">new</span> <span class="ty">int</span>(val); }
-    
-    <span class="cm">// Custom copy constructor — allocates NEW memory</span>
-    <span class="fn">DeepDemo</span>(<span class="kw">const</span> <span class="ty">DeepDemo</span>&amp; other) {
-        data = <span class="kw">new</span> <span class="ty">int</span>(*other.data); <span class="cm">// new memory, same value</span>
+    <span class="fn">Deep</span>(<span class="ty">int</span> v) { data = <span class="kw">new</span> <span class="ty">int</span>(v); }
+    <span class="fn">Deep</span>(<span class="kw">const</span> <span class="ty">Deep</span>&amp; o) {
+        data = <span class="kw">new</span> <span class="ty">int</span>(*o.data); <span class="cm">// NEW allocation, SAME value</span>
     }
-    
-    ~<span class="fn">DeepDemo</span>() { <span class="kw">delete</span> data; } <span class="cm">// safe: each deletes its own</span>
+    ~<span class="fn">Deep</span>() { <span class="kw">delete</span> data; }
 };</code></pre>
-
     <table>
-      <tr><th>Aspect</th><th>Shallow Copy</th><th>Deep Copy</th></tr>
-      <tr><td>Pointer copied</td><td>Address only</td><td>New memory allocated</td></tr>
+      <tr><th></th><th>Shallow Copy</th><th>Deep Copy</th></tr>
+      <tr><td>Pointer</td><td>Address copied</td><td>New memory allocated</td></tr>
       <tr><td>Independence</td><td>❌ Shared memory</td><td>✅ Independent</td></tr>
-      <tr><td>Risk</td><td>Double delete crash</td><td>Safe</td></tr>
-      <tr><td>When needed</td><td>No dynamic memory</td><td>Has dynamic memory</td></tr>
+      <tr><td>Risk</td><td>Double-delete crash</td><td>Safe</td></tr>
     </table>
   </div>
 </div>
@@ -414,72 +436,41 @@
   <div class="section-label">Topic 3</div>
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:var(--danger-light)">💾</div>
-      <h2>Destructor &amp; Dynamic Memory</h2>
+      <div class="card-icon" style="background:rgba(230,57,70,0.12)">💾</div>
+      <h2>Destructor &amp; Dynamic Memory (new/delete)</h2>
     </div>
-    <h3>Destructor</h3>
-    <p>Called automatically when an object goes out of scope or is deleted. Used to free dynamic memory.</p>
-    <div class="info-box">Destructor name = ~ClassName() | No return type | No parameters | One per class</div>
+    <div class="info-box">Destructor = <code>~ClassName()</code> | No return type | No parameters | Called automatically on destruction</div>
 <pre><code><span class="kw">class</span> <span class="ty">DynArray</span> {
-<span class="kw">private</span>:
     <span class="ty">int</span>* arr;
-    <span class="ty">int</span> size;
+    <span class="ty">int</span>  size;
 <span class="kw">public</span>:
-    <span class="fn">DynArray</span>(<span class="ty">int</span> n) {
-        size = n;
+    <span class="fn">DynArray</span>(<span class="ty">int</span> n) : size(n) {
         arr = <span class="kw">new</span> <span class="ty">int</span>[n];
-        cout &lt;&lt; <span class="st">"Constructor: memory allocated\n"</span>;
+        cout &lt;&lt; <span class="st">"Allocated "</span> &lt;&lt; n &lt;&lt; <span class="st">" ints\n"</span>;
     }
-    
     ~<span class="fn">DynArray</span>() {
-        <span class="kw">delete</span>[] arr;  <span class="cm">// Free array memory</span>
-        cout &lt;&lt; <span class="st">"Destructor: memory freed\n"</span>;
+        <span class="kw">delete</span>[] arr;   <span class="cm">// free array memory</span>
+        cout &lt;&lt; <span class="st">"Memory freed\n"</span>;
     }
-    
-    <span class="ty">void</span> <span class="fn">set</span>(<span class="ty">int</span> i, <span class="ty">int</span> val) { arr[i] = val; }
-    <span class="ty">int</span> <span class="fn">get</span>(<span class="ty">int</span> i) { <span class="kw">return</span> arr[i]; }
 };</code></pre>
-
-    <h3>new and delete</h3>
     <table>
-      <tr><th>Operation</th><th>Syntax</th><th>Notes</th></tr>
-      <tr><td>Allocate single</td><td>new Type(val)</td><td>Returns pointer</td></tr>
-      <tr><td>Allocate array</td><td>new Type[n]</td><td>Array on heap</td></tr>
-      <tr><td>Free single</td><td>delete ptr</td><td>Frees 1 object</td></tr>
-      <tr><td>Free array</td><td>delete[] ptr</td><td>Must use [] for arrays!</td></tr>
+      <tr><th>Operation</th><th>Syntax</th><th>Free With</th></tr>
+      <tr><td>Single object</td><td>new Type(val)</td><td>delete ptr</td></tr>
+      <tr><td>Array</td><td>new Type[n]</td><td><strong>delete[] ptr</strong></td></tr>
     </table>
-<pre><code><span class="ty">int</span>* p = <span class="kw">new</span> <span class="ty">int</span>(<span class="nm">42</span>);  <span class="cm">// single int on heap</span>
-<span class="kw">delete</span> p;
-p = <span class="kw">nullptr</span>;           <span class="cm">// good practice!</span>
-
-<span class="ty">int</span>* arr = <span class="kw">new</span> <span class="ty">int</span>[<span class="nm">5</span>]; <span class="cm">// array on heap</span>
-arr[<span class="nm">0</span>] = <span class="nm">10</span>;
-<span class="kw">delete</span>[] arr;          <span class="cm">// MUST use delete[]</span></code></pre>
-    <div class="danger-box">⚠️ <strong>Common mistakes:</strong> Using delete instead of delete[] for arrays | Not setting pointer to nullptr after delete | Forgetting to delete (memory leak)</div>
-
-    <h3>Full Example — Rule of Three</h3>
-    <p>If you define any of: destructor, copy constructor, copy assignment — define all three.</p>
-<pre><code><span class="kw">class</span> <span class="ty">MyString</span> {
-<span class="kw">private</span>:
+    <div class="danger-box">⚠️ <strong>Never</strong> use <code>delete</code> for arrays — always <code>delete[]</code>. Set pointer to <code>nullptr</code> after delete.</div>
+    <h3>Rule of Three</h3>
+    <p>If you define any one of these, define all three:</p>
+<pre><code><span class="kw">class</span> <span class="ty">MyStr</span> {
     <span class="ty">char</span>* str;
 <span class="kw">public</span>:
-    <span class="fn">MyString</span>(<span class="kw">const</span> <span class="ty">char</span>* s) {   <span class="cm">// Constructor</span>
-        str = <span class="kw">new</span> <span class="ty">char</span>[strlen(s)+<span class="nm">1</span>];
-        strcpy(str, s);
-    }
-    <span class="fn">MyString</span>(<span class="kw">const</span> <span class="ty">MyString</span>&amp; o) { <span class="cm">// Copy Constructor</span>
-        str = <span class="kw">new</span> <span class="ty">char</span>[strlen(o.str)+<span class="nm">1</span>];
-        strcpy(str, o.str);
-    }
-    <span class="ty">MyString</span>&amp; <span class="kw">operator</span>=(<span class="kw">const</span> <span class="ty">MyString</span>&amp; o) { <span class="cm">// Copy Assignment</span>
-        <span class="kw">if</span> (<span class="kw">this</span> != &amp;o) {
-            <span class="kw">delete</span>[] str;
-            str = <span class="kw">new</span> <span class="ty">char</span>[strlen(o.str)+<span class="nm">1</span>];
-            strcpy(str, o.str);
-        }
+    <span class="fn">MyStr</span>(<span class="kw">const</span> <span class="ty">char</span>* s) { str = <span class="kw">new</span> <span class="ty">char</span>[strlen(s)+<span class="nm">1</span>]; strcpy(str,s); }
+    <span class="fn">MyStr</span>(<span class="kw">const</span> <span class="ty">MyStr</span>&amp; o) { str = <span class="kw">new</span> <span class="ty">char</span>[strlen(o.str)+<span class="nm">1</span>]; strcpy(str,o.str); }
+    <span class="ty">MyStr</span>&amp; <span class="kw">operator</span>=(<span class="kw">const</span> <span class="ty">MyStr</span>&amp; o) {
+        <span class="kw">if</span>(<span class="kw">this</span> != &amp;o) { <span class="kw">delete</span>[] str; str=<span class="kw">new</span> <span class="ty">char</span>[strlen(o.str)+<span class="nm">1</span>]; strcpy(str,o.str); }
         <span class="kw">return</span> *<span class="kw">this</span>;
     }
-    ~<span class="fn">MyString</span>() { <span class="kw">delete</span>[] str; }  <span class="cm">// Destructor</span>
+    ~<span class="fn">MyStr</span>() { <span class="kw">delete</span>[] str; }
 };</code></pre>
   </div>
 </div>
@@ -491,51 +482,34 @@ arr[<span class="nm">0</span>] = <span class="nm">10</span>;
   <div class="section-label">Topic 4</div>
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:var(--success-light)">🔒</div>
+      <div class="card-icon" style="background:rgba(45,154,78,0.12)">🔒</div>
       <h2>Encapsulation</h2>
     </div>
-    <p>Encapsulation = bundling data + functions together, restricting direct access via access specifiers. Data is <strong>hidden</strong>, accessed via <strong>getters/setters</strong>.</p>
-    <div class="info-box">✅ Benefits: Data protection | Controlled access | Easier maintenance | Data validation</div>
-    
+    <p>Bundling data + functions together and restricting direct access. Data is <strong>private</strong>, accessed only through <strong>public getters/setters</strong>.</p>
+    <div class="success-box">✅ Benefits: Data protection | Input validation | Controlled access | Easier maintenance</div>
 <pre><code><span class="kw">class</span> <span class="ty">BankAccount</span> {
 <span class="kw">private</span>:
-    <span class="ty">double</span> balance;   <span class="cm">// hidden from outside world</span>
+    <span class="ty">double</span> balance;
     <span class="ty">string</span> owner;
-    
-    <span class="ty">bool</span> <span class="fn">isValidAmount</span>(<span class="ty">double</span> amt) {  <span class="cm">// private helper</span>
-        <span class="kw">return</span> amt > <span class="nm">0</span>;
-    }
-    
+    <span class="ty">bool</span> <span class="fn">isValid</span>(<span class="ty">double</span> amt) { <span class="kw">return</span> amt > <span class="nm">0</span>; }
+
 <span class="kw">public</span>:
-    <span class="fn">BankAccount</span>(<span class="ty">string</span> name, <span class="ty">double</span> initial)
-        : owner(name), balance(initial) {}
-    
-    <span class="cm">// Getter — read only access</span>
+    <span class="fn">BankAccount</span>(<span class="ty">string</span> name, <span class="ty">double</span> initial) : owner(name), balance(initial) {}
     <span class="ty">double</span> <span class="fn">getBalance</span>() <span class="kw">const</span> { <span class="kw">return</span> balance; }
-    
-    <span class="cm">// Controlled setter with validation</span>
-    <span class="ty">bool</span> <span class="fn">deposit</span>(<span class="ty">double</span> amount) {
-        <span class="kw">if</span> (<span class="fn">isValidAmount</span>(amount)) {
-            balance += amount;
-            <span class="kw">return</span> <span class="kw">true</span>;
-        }
-        cout &lt;&lt; <span class="st">"Invalid deposit amount!\n"</span>;
-        <span class="kw">return</span> <span class="kw">false</span>;
+
+    <span class="ty">bool</span> <span class="fn">deposit</span>(<span class="ty">double</span> amt) {
+        <span class="kw">if</span>(!<span class="fn">isValid</span>(amt)) { cout &lt;&lt; <span class="st">"Invalid!\n"</span>; <span class="kw">return</span> <span class="kw">false</span>; }
+        balance += amt; <span class="kw">return</span> <span class="kw">true</span>;
     }
-    
-    <span class="ty">bool</span> <span class="fn">withdraw</span>(<span class="ty">double</span> amount) {
-        <span class="kw">if</span> (<span class="fn">isValidAmount</span>(amount) &amp;&amp; amount &lt;= balance) {
-            balance -= amount;
-            <span class="kw">return</span> <span class="kw">true</span>;
-        }
-        cout &lt;&lt; <span class="st">"Insufficient funds or invalid amount!\n"</span>;
-        <span class="kw">return</span> <span class="kw">false</span>;
+    <span class="ty">bool</span> <span class="fn">withdraw</span>(<span class="ty">double</span> amt) {
+        <span class="kw">if</span>(!<span class="fn">isValid</span>(amt) || amt > balance) { cout &lt;&lt; <span class="st">"Failed!\n"</span>; <span class="kw">return</span> <span class="kw">false</span>; }
+        balance -= amt; <span class="kw">return</span> <span class="kw">true</span>;
     }
 };
 
 <span class="ty">int</span> <span class="fn">main</span>() {
     <span class="ty">BankAccount</span> acc(<span class="st">"Ali"</span>, <span class="nm">1000</span>);
-    <span class="cm">// acc.balance = 5000; // ERROR! private</span>
+    <span class="cm">// acc.balance = 9999; ← ERROR: private</span>
     acc.<span class="fn">deposit</span>(<span class="nm">500</span>);
     cout &lt;&lt; acc.<span class="fn">getBalance</span>(); <span class="cm">// 1500</span>
 }</code></pre>
@@ -549,94 +523,37 @@ arr[<span class="nm">0</span>] = <span class="nm">10</span>;
   <div class="section-label">Topics 6 &amp; 8</div>
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:var(--accent-light)">🤝</div>
-      <h2>Member Functions &amp; Friend Functions</h2>
+      <div class="card-icon" style="background:rgba(0,180,216,0.12)">🤝</div>
+      <h2>Member &amp; Friend Functions</h2>
     </div>
-    <h3>Member Functions</h3>
-    <p>Functions defined inside or associated with a class. Can be defined inside class (inline) or outside using <code>::</code>.</p>
-<pre><code><span class="kw">class</span> <span class="ty">Circle</span> {
-<span class="kw">private</span>:
-    <span class="ty">double</span> radius;
-<span class="kw">public</span>:
-    <span class="fn">Circle</span>(<span class="ty">double</span> r) : radius(r) {}
-    
-    <span class="ty">double</span> <span class="fn">area</span>();        <span class="cm">// declaration inside</span>
-    <span class="ty">double</span> <span class="fn">perimeter</span>();  <span class="cm">// declaration inside</span>
-};
-
-<span class="cm">// Definition outside using scope resolution ::</span>
-<span class="ty">double</span> <span class="ty">Circle</span>::<span class="fn">area</span>() {
-    <span class="kw">return</span> <span class="nm">3.14159</span> * radius * radius;
-}
-<span class="ty">double</span> <span class="ty">Circle</span>::<span class="fn">perimeter</span>() {
-    <span class="kw">return</span> <span class="nm">2</span> * <span class="nm">3.14159</span> * radius;
-}</code></pre>
-
-    <h3>Friend Function</h3>
-    <div class="warn-box">A friend function is NOT a member of the class, but has access to ALL private/protected members. Declared inside class with <code>friend</code> keyword.</div>
 <pre><code><span class="kw">class</span> <span class="ty">Box</span> {
-<span class="kw">private</span>:
-    <span class="ty">double</span> volume;
+    <span class="ty">double</span> vol;
 <span class="kw">public</span>:
-    <span class="fn">Box</span>(<span class="ty">double</span> v) : volume(v) {}
-    
-    <span class="cm">// Friend function declaration</span>
-    <span class="kw">friend</span> <span class="ty">double</span> <span class="fn">getVolume</span>(<span class="ty">Box</span>&amp; b);
-    <span class="kw">friend</span> <span class="ty">void</span> <span class="fn">compareBoxes</span>(<span class="ty">Box</span>&amp; b1, <span class="ty">Box</span>&amp; b2);
+    <span class="fn">Box</span>(<span class="ty">double</span> v) : vol(v) {}
+    <span class="ty">double</span> <span class="fn">getVol</span>();                        <span class="cm">// member — declared</span>
+    <span class="kw">friend</span> <span class="ty">void</span> <span class="fn">compare</span>(<span class="ty">Box</span>&amp;, <span class="ty">Box</span>&amp;);      <span class="cm">// friend — declared</span>
 };
-
-<span class="cm">// Friend function definition (NOT part of Box class)</span>
-<span class="ty">double</span> <span class="fn">getVolume</span>(<span class="ty">Box</span>&amp; b) {
-    <span class="kw">return</span> b.volume; <span class="cm">// CAN access private member</span>
-}
-
-<span class="ty">void</span> <span class="fn">compareBoxes</span>(<span class="ty">Box</span>&amp; b1, <span class="ty">Box</span>&amp; b2) {
-    <span class="kw">if</span> (b1.volume > b2.volume)
-        cout &lt;&lt; <span class="st">"Box 1 is bigger"</span>;
-    <span class="kw">else</span>
-        cout &lt;&lt; <span class="st">"Box 2 is bigger"</span>;
+<span class="ty">double</span> <span class="ty">Box</span>::<span class="fn">getVol</span>() { <span class="kw">return</span> vol; }       <span class="cm">// member — defined outside</span>
+<span class="ty">void</span> <span class="fn">compare</span>(<span class="ty">Box</span>&amp; a, <span class="ty">Box</span>&amp; b) {           <span class="cm">// friend — no Box:: prefix</span>
+    cout &lt;&lt; (a.vol > b.vol ? <span class="st">"A bigger"</span> : <span class="st">"B bigger"</span>);
 }</code></pre>
-
     <table>
-      <tr><th>Aspect</th><th>Member Function</th><th>Friend Function</th></tr>
+      <tr><th></th><th>Member Function</th><th>Friend Function</th></tr>
       <tr><td>Part of class?</td><td>Yes</td><td>No</td></tr>
       <tr><td>Called with</td><td>obj.func()</td><td>func(obj)</td></tr>
+      <tr><td>this pointer?</td><td>Yes</td><td>No</td></tr>
       <tr><td>Access private?</td><td>Yes</td><td>Yes</td></tr>
-      <tr><td>Has this pointer?</td><td>Yes</td><td>No</td></tr>
     </table>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon" style="background:var(--primary-light)">📨</div>
-      <h2>Pass by Value vs Pass by Reference</h2>
-    </div>
-<pre><code><span class="cm">// PASS BY VALUE — copy is made</span>
-<span class="ty">void</span> <span class="fn">doubleVal</span>(<span class="ty">int</span> x) {
-    x *= <span class="nm">2</span>;  <span class="cm">// original unchanged</span>
-}
-
-<span class="cm">// PASS BY REFERENCE — original is modified</span>
-<span class="ty">void</span> <span class="fn">doubleRef</span>(<span class="ty">int</span>&amp; x) {
-    x *= <span class="nm">2</span>;  <span class="cm">// original IS changed</span>
-}
-
-<span class="cm">// PASS BY CONST REF — efficient, no copy, no modification</span>
-<span class="ty">void</span> <span class="fn">printStudent</span>(<span class="kw">const</span> <span class="ty">Student</span>&amp; s) {
-    s.<span class="fn">display</span>(); <span class="cm">// read only, no copy overhead</span>
-}
+    <h3>Pass by Value vs Reference</h3>
+<pre><code><span class="ty">void</span> <span class="fn">byVal</span>(<span class="ty">int</span> x)        { x *= <span class="nm">2</span>; }   <span class="cm">// copy — original unchanged</span>
+<span class="ty">void</span> <span class="fn">byRef</span>(<span class="ty">int</span>&amp; x)       { x *= <span class="nm">2</span>; }   <span class="cm">// reference — original changed</span>
+<span class="ty">void</span> <span class="fn">byConstRef</span>(<span class="kw">const</span> <span class="ty">int</span>&amp; x) { <span class="cm">/* read only, no copy overhead */</span> }
 
 <span class="ty">int</span> <span class="fn">main</span>() {
     <span class="ty">int</span> n = <span class="nm">10</span>;
-    <span class="fn">doubleVal</span>(n);  cout &lt;&lt; n; <span class="cm">// 10 (unchanged)</span>
-    <span class="fn">doubleRef</span>(n);  cout &lt;&lt; n; <span class="cm">// 20 (changed)</span>
+    <span class="fn">byVal</span>(n); cout &lt;&lt; n; <span class="cm">// 10 — unchanged</span>
+    <span class="fn">byRef</span>(n); cout &lt;&lt; n; <span class="cm">// 20 — modified!</span>
 }</code></pre>
-    <table>
-      <tr><th>Method</th><th>Syntax</th><th>Original Changed?</th><th>Copies Data?</th></tr>
-      <tr><td>By Value</td><td>void f(int x)</td><td>No</td><td>Yes</td></tr>
-      <tr><td>By Reference</td><td>void f(int&amp; x)</td><td>Yes</td><td>No</td></tr>
-      <tr><td>By Const Ref</td><td>void f(const int&amp; x)</td><td>No</td><td>No</td></tr>
-    </table>
   </div>
 </div>
 </div>
@@ -647,161 +564,87 @@ arr[<span class="nm">0</span>] = <span class="nm">10</span>;
   <div class="section-label">Topic 9 — High Priority</div>
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:var(--warn-light)">⚙️</div>
+      <div class="card-icon" style="background:rgba(212,160,23,0.12)">⚙️</div>
       <h2>Operator Overloading</h2>
     </div>
-    <p>Giving custom meaning to operators for user-defined types. Use <code>operator</code> keyword.</p>
+    <table>
+      <tr><th>Operator</th><th>Return Type</th><th>Member/Friend</th><th>Key Rule</th></tr>
+      <tr><td>+, -</td><td>New object (by value)</td><td>Either</td><td>Don't modify operands</td></tr>
+      <tr><td>==, !=</td><td>bool</td><td>Either</td><td>Mark const</td></tr>
+      <tr><td>++ prefix</td><td>ClassName& (ref)</td><td>Member</td><td>Increment then return</td></tr>
+      <tr><td>++ postfix</td><td>ClassName (value)</td><td>Member</td><td>Dummy int param!</td></tr>
+      <tr><td>=</td><td>ClassName&</td><td>Member only</td><td>Check self-assignment</td></tr>
+      <tr><td>&lt;&lt;</td><td>ostream&</td><td>Friend ONLY</td><td>Return ostream for chaining</td></tr>
+    </table>
 
     <div class="accordion open">
-      <div class="acc-header" onclick="toggleAcc(this)">+ and - Operators <span class="acc-arrow">▼</span></div>
+      <div class="acc-header" onclick="toggleAcc(this)">+ and − Operators <span class="acc-arrow">▼</span></div>
       <div class="acc-body">
-<pre><code><span class="kw">class</span> <span class="ty">Vector</span> {
+<pre><code><span class="kw">class</span> <span class="ty">Vec</span> {
 <span class="kw">public</span>:
     <span class="ty">int</span> x, y;
-    <span class="fn">Vector</span>(<span class="ty">int</span> x=<span class="nm">0</span>, <span class="ty">int</span> y=<span class="nm">0</span>) : x(x), y(y) {}
-    
-    <span class="cm">// + operator: returns new Vector (doesn't modify)</span>
-    <span class="ty">Vector</span> <span class="kw">operator</span>+(<span class="kw">const</span> <span class="ty">Vector</span>&amp; other) <span class="kw">const</span> {
-        <span class="kw">return</span> <span class="ty">Vector</span>(x + other.x, y + other.y);
-    }
-    
-    <span class="cm">// - operator</span>
-    <span class="ty">Vector</span> <span class="kw">operator</span>-(<span class="kw">const</span> <span class="ty">Vector</span>&amp; other) <span class="kw">const</span> {
-        <span class="kw">return</span> <span class="ty">Vector</span>(x - other.x, y - other.y);
-    }
-};
-
-<span class="ty">int</span> <span class="fn">main</span>() {
-    <span class="ty">Vector</span> v1(<span class="nm">2</span>,<span class="nm">3</span>), v2(<span class="nm">1</span>,<span class="nm">4</span>);
-    <span class="ty">Vector</span> v3 = v1 + v2;  <span class="cm">// calls operator+</span>
-    <span class="cm">// v3.x = 3, v3.y = 7</span>
-}</code></pre>
+    <span class="fn">Vec</span>(<span class="ty">int</span> x=<span class="nm">0</span>, <span class="ty">int</span> y=<span class="nm">0</span>) : x(x), y(y) {}
+    <span class="ty">Vec</span> <span class="kw">operator</span>+(<span class="kw">const</span> <span class="ty">Vec</span>&amp; o) <span class="kw">const</span> { <span class="kw">return</span> <span class="ty">Vec</span>(x+o.x, y+o.y); }
+    <span class="ty">Vec</span> <span class="kw">operator</span>-(<span class="kw">const</span> <span class="ty">Vec</span>&amp; o) <span class="kw">const</span> { <span class="kw">return</span> <span class="ty">Vec</span>(x-o.x, y-o.y); }
+};</code></pre>
       </div>
     </div>
-
     <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">&lt;&lt; Stream Operator <span class="acc-arrow">▼</span></div>
+      <div class="acc-header" onclick="toggleAcc(this)">&lt;&lt; Stream Operator (Friend) <span class="acc-arrow">▼</span></div>
       <div class="acc-body">
-        <div class="warn-box">⚠️ << must be a FRIEND function — left operand is ostream, not our class!</div>
+        <div class="warn-box">⚠️ Left operand is <code>ostream</code> — must be friend. Return <code>ostream&</code> to allow chaining.</div>
 <pre><code><span class="kw">class</span> <span class="ty">Point</span> {
 <span class="kw">public</span>:
     <span class="ty">int</span> x, y;
-    <span class="fn">Point</span>(<span class="ty">int</span> x=<span class="nm">0</span>, <span class="ty">int</span> y=<span class="nm">0</span>): x(x), y(y) {}
-    
-    <span class="cm">// Must be friend — ostream is on the left</span>
+    <span class="fn">Point</span>(<span class="ty">int</span> x=<span class="nm">0</span>, <span class="ty">int</span> y=<span class="nm">0</span>) : x(x), y(y) {}
     <span class="kw">friend</span> ostream&amp; <span class="kw">operator</span>&lt;&lt;(ostream&amp; out, <span class="kw">const</span> <span class="ty">Point</span>&amp; p) {
-        out &lt;&lt; <span class="st">"("</span> &lt;&lt; p.x &lt;&lt; <span class="st">", "</span> &lt;&lt; p.y &lt;&lt; <span class="st">")"</span>;
-        <span class="kw">return</span> out; <span class="cm">// return ostream for chaining: cout &lt;&lt; p1 &lt;&lt; p2</span>
+        out &lt;&lt; <span class="st">"("</span> &lt;&lt; p.x &lt;&lt; <span class="st">","</span> &lt;&lt; p.y &lt;&lt; <span class="st">")"</span>;
+        <span class="kw">return</span> out; <span class="cm">// return for chaining: cout &lt;&lt; p1 &lt;&lt; p2</span>
     }
-};
-
-<span class="ty">int</span> <span class="fn">main</span>() {
-    <span class="ty">Point</span> p(<span class="nm">3</span>, <span class="nm">4</span>);
-    cout &lt;&lt; p;           <span class="cm">// prints: (3, 4)</span>
-    cout &lt;&lt; p &lt;&lt; endl;   <span class="cm">// chaining works!</span>
-}</code></pre>
+};</code></pre>
       </div>
     </div>
-
     <div class="accordion">
       <div class="acc-header" onclick="toggleAcc(this)">== and != Operators <span class="acc-arrow">▼</span></div>
       <div class="acc-body">
 <pre><code><span class="kw">class</span> <span class="ty">Student</span> {
 <span class="kw">public</span>:
-    <span class="ty">int</span> id;
-    <span class="ty">string</span> name;
-    <span class="fn">Student</span>(<span class="ty">int</span> id, <span class="ty">string</span> n): id(id), name(n) {}
-    
-    <span class="ty">bool</span> <span class="kw">operator</span>==(<span class="kw">const</span> <span class="ty">Student</span>&amp; other) <span class="kw">const</span> {
-        <span class="kw">return</span> id == other.id;  <span class="cm">// compare by id</span>
-    }
-    
-    <span class="ty">bool</span> <span class="kw">operator</span>!=(<span class="kw">const</span> <span class="ty">Student</span>&amp; other) <span class="kw">const</span> {
-        <span class="kw">return</span> !(*<span class="kw">this</span> == other); <span class="cm">// reuse ==</span>
-    }
-};
-
-<span class="ty">int</span> <span class="fn">main</span>() {
-    <span class="ty">Student</span> s1(<span class="nm">1</span>, <span class="st">"Ali"</span>), s2(<span class="nm">1</span>, <span class="st">"Sara"</span>), s3(<span class="nm">2</span>, <span class="st">"Bob"</span>);
-    cout &lt;&lt; (s1 == s2);  <span class="cm">// 1 (true, same id)</span>
-    cout &lt;&lt; (s1 != s3);  <span class="cm">// 1 (true, different id)</span>
-}</code></pre>
-      </div>
-    </div>
-
-    <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">++ Prefix and ++ Postfix <span class="acc-arrow">▼</span></div>
-      <div class="acc-body">
-        <div class="info-box">Trick: Postfix takes a dummy <code>int</code> parameter to distinguish from prefix!</div>
-<pre><code><span class="kw">class</span> <span class="ty">Counter</span> {
-<span class="kw">private</span>:
-    <span class="ty">int</span> count;
-<span class="kw">public</span>:
-    <span class="fn">Counter</span>(<span class="ty">int</span> c=<span class="nm">0</span>) : count(c) {}
-    
-    <span class="cm">// PREFIX ++obj — increment THEN return</span>
-    <span class="ty">Counter</span>&amp; <span class="kw">operator</span>++() {
-        ++count;
-        <span class="kw">return</span> *<span class="kw">this</span>;  <span class="cm">// return reference to current</span>
-    }
-    
-    <span class="cm">// POSTFIX obj++ — return THEN increment</span>
-    <span class="ty">Counter</span> <span class="kw">operator</span>++(<span class="ty">int</span>) {  <span class="cm">// dummy int parameter!</span>
-        <span class="ty">Counter</span> temp = *<span class="kw">this</span>;  <span class="cm">// save current state</span>
-        ++count;                 <span class="cm">// then increment</span>
-        <span class="kw">return</span> temp;             <span class="cm">// return old state</span>
-    }
-    
-    <span class="ty">int</span> <span class="fn">getCount</span>() <span class="kw">const</span> { <span class="kw">return</span> count; }
-};
-
-<span class="ty">int</span> <span class="fn">main</span>() {
-    <span class="ty">Counter</span> c(<span class="nm">5</span>);
-    cout &lt;&lt; (++c).<span class="fn">getCount</span>();  <span class="cm">// 6 (increment first)</span>
-    cout &lt;&lt; (c++).<span class="fn">getCount</span>();  <span class="cm">// 6 (return old), c is now 7</span>
-    cout &lt;&lt; c.<span class="fn">getCount</span>();      <span class="cm">// 7</span>
-}</code></pre>
-      </div>
-    </div>
-
-    <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">= Assignment Operator <span class="acc-arrow">▼</span></div>
-      <div class="acc-body">
-        <div class="danger-box">⚠️ Always check for self-assignment! (this != &other)</div>
-<pre><code><span class="kw">class</span> <span class="ty">MyArray</span> {
-<span class="kw">private</span>:
-    <span class="ty">int</span>* data;
-    <span class="ty">int</span> size;
-<span class="kw">public</span>:
-    <span class="fn">MyArray</span>(<span class="ty">int</span> n) : size(n) { data = <span class="kw">new</span> <span class="ty">int</span>[n]; }
-    
-    <span class="cm">// Copy assignment operator</span>
-    <span class="ty">MyArray</span>&amp; <span class="kw">operator</span>=(<span class="kw">const</span> <span class="ty">MyArray</span>&amp; other) {
-        <span class="kw">if</span> (<span class="kw">this</span> != &amp;other) {   <span class="cm">// SELF-ASSIGNMENT CHECK</span>
-            <span class="kw">delete</span>[] data;      <span class="cm">// free old memory</span>
-            size = other.size;
-            data = <span class="kw">new</span> <span class="ty">int</span>[size]; <span class="cm">// allocate new</span>
-            <span class="kw">for</span>(<span class="ty">int</span> i=<span class="nm">0</span>; i&lt;size; i++)
-                data[i] = other.data[i];
-        }
-        <span class="kw">return</span> *<span class="kw">this</span>;  <span class="cm">// allows a = b = c chaining</span>
-    }
-    
-    ~<span class="fn">MyArray</span>() { <span class="kw">delete</span>[] data; }
+    <span class="ty">int</span> id; <span class="ty">string</span> name;
+    <span class="fn">Student</span>(<span class="ty">int</span> id, <span class="ty">string</span> n) : id(id), name(n) {}
+    <span class="ty">bool</span> <span class="kw">operator</span>==(<span class="kw">const</span> <span class="ty">Student</span>&amp; o) <span class="kw">const</span> { <span class="kw">return</span> id == o.id; }
+    <span class="ty">bool</span> <span class="kw">operator</span>!=(<span class="kw">const</span> <span class="ty">Student</span>&amp; o) <span class="kw">const</span> { <span class="kw">return</span> !(*<span class="kw">this</span> == o); }
 };</code></pre>
       </div>
     </div>
-
-    <h3>Quick Reference Table</h3>
-    <table>
-      <tr><th>Operator</th><th>Return Type</th><th>Friend/Member</th><th>Key Note</th></tr>
-      <tr><td>+, -</td><td>New object (by value)</td><td>Either</td><td>Don't modify operands</td></tr>
-      <tr><td>==, !=</td><td>bool</td><td>Either</td><td>Mark const</td></tr>
-      <tr><td>++ prefix</td><td>ClassName& (ref)</td><td>Member</td><td>Increment then return</td></tr>
-      <tr><td>++ postfix</td><td>ClassName (value)</td><td>Member</td><td>Dummy int param</td></tr>
-      <tr><td>=</td><td>ClassName&</td><td>Member only</td><td>Check self-assignment</td></tr>
-      <tr><td>&lt;&lt;</td><td>ostream&</td><td>Friend only</td><td>Return ostream for chaining</td></tr>
-    </table>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">++ Prefix vs Postfix <span class="acc-arrow">▼</span></div>
+      <div class="acc-body">
+        <div class="info-box">Trick: Postfix takes a dummy <code>int</code> to distinguish from prefix!</div>
+<pre><code><span class="kw">class</span> <span class="ty">Counter</span> {
+    <span class="ty">int</span> n;
+<span class="kw">public</span>:
+    <span class="fn">Counter</span>(<span class="ty">int</span> n=<span class="nm">0</span>) : n(n) {}
+    <span class="ty">Counter</span>&amp; <span class="kw">operator</span>++()      { ++n; <span class="kw">return</span> *<span class="kw">this</span>; }       <span class="cm">// PREFIX</span>
+    <span class="ty">Counter</span>  <span class="kw">operator</span>++(<span class="ty">int</span>)  { <span class="ty">Counter</span> t=*<span class="kw">this</span>; ++n; <span class="kw">return</span> t; } <span class="cm">// POSTFIX</span>
+    <span class="ty">int</span> <span class="fn">get</span>() <span class="kw">const</span> { <span class="kw">return</span> n; }
+};</code></pre>
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">= Assignment Operator <span class="acc-arrow">▼</span></div>
+      <div class="acc-body">
+        <div class="danger-box">⚠️ Always check for self-assignment: <code>if (this != &amp;other)</code></div>
+<pre><code><span class="ty">MyArr</span>&amp; <span class="kw">operator</span>=(<span class="kw">const</span> <span class="ty">MyArr</span>&amp; o) {
+    <span class="kw">if</span>(<span class="kw">this</span> != &amp;o) {       <span class="cm">// self-assign guard</span>
+        <span class="kw">delete</span>[] data;     <span class="cm">// free existing</span>
+        size = o.size;
+        data = <span class="kw">new</span> <span class="ty">int</span>[size];
+        <span class="kw">for</span>(<span class="ty">int</span> i=<span class="nm">0</span>; i&lt;size; i++) data[i] = o.data[i];
+    }
+    <span class="kw">return</span> *<span class="kw">this</span>;          <span class="cm">// allows a = b = c</span>
+}</code></pre>
+      </div>
+    </div>
   </div>
 </div>
 </div>
@@ -812,56 +655,34 @@ arr[<span class="nm">0</span>] = <span class="nm">10</span>;
   <div class="section-label">Topic 10</div>
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:var(--primary-light)">📊</div>
+      <div class="card-icon" style="background:rgba(0,180,216,0.12)">📊</div>
       <h2>Static Variables and Functions</h2>
     </div>
-    <p>Static members belong to the <strong>class</strong>, not to individual objects. Shared across ALL instances.</p>
-    <div class="info-box">Static variable: one copy shared by all objects. Static function: can only access static members.</div>
+    <div class="info-box">Static members belong to the <strong>class</strong>, not to any single object. One copy shared by all instances.</div>
 <pre><code><span class="kw">class</span> <span class="ty">Employee</span> {
-<span class="kw">private</span>:
     <span class="ty">string</span> name;
-    <span class="kw">static</span> <span class="ty">int</span> count;  <span class="cm">// shared by ALL Employee objects</span>
-
+    <span class="kw">static</span> <span class="ty">int</span> count; <span class="cm">// shared by ALL objects</span>
 <span class="kw">public</span>:
-    <span class="fn">Employee</span>(<span class="ty">string</span> n) : name(n) {
-        count++;  <span class="cm">// increments shared counter</span>
-    }
-    
-    ~<span class="fn">Employee</span>() {
-        count--;  <span class="cm">// decrements when destroyed</span>
-    }
-    
-    <span class="cm">// Static function — no 'this' pointer</span>
-    <span class="kw">static</span> <span class="ty">int</span> <span class="fn">getCount</span>() {
-        <span class="kw">return</span> count;
-        <span class="cm">// cannot access 'name' here — it's non-static</span>
-    }
-    
-    <span class="ty">void</span> <span class="fn">display</span>() { cout &lt;&lt; name &lt;&lt; endl; }
+    <span class="fn">Employee</span>(<span class="ty">string</span> n) : name(n) { count++; }
+    ~<span class="fn">Employee</span>()                   { count--; }
+    <span class="kw">static</span> <span class="ty">int</span> <span class="fn">getCount</span>() { <span class="kw">return</span> count; } <span class="cm">// static fn</span>
+    <span class="cm">// static fn cannot access 'name' — no 'this' pointer</span>
 };
-
-<span class="cm">// Must define static variable outside class!</span>
-<span class="ty">int</span> <span class="ty">Employee</span>::count = <span class="nm">0</span>;
+<span class="ty">int</span> <span class="ty">Employee</span>::count = <span class="nm">0</span>;  <span class="cm">// REQUIRED — define outside class</span>
 
 <span class="ty">int</span> <span class="fn">main</span>() {
     cout &lt;&lt; <span class="ty">Employee</span>::<span class="fn">getCount</span>(); <span class="cm">// 0</span>
-    {
-        <span class="ty">Employee</span> e1(<span class="st">"Ali"</span>);
-        <span class="ty">Employee</span> e2(<span class="st">"Sara"</span>);
-        cout &lt;&lt; <span class="ty">Employee</span>::<span class="fn">getCount</span>(); <span class="cm">// 2</span>
-    } <span class="cm">// e1, e2 destroyed here</span>
-    cout &lt;&lt; <span class="ty">Employee</span>::<span class="fn">getCount</span>(); <span class="cm">// 0</span>
+    { <span class="ty">Employee</span> e1(<span class="st">"Ali"</span>), e2(<span class="st">"Sara"</span>); cout &lt;&lt; <span class="ty">Employee</span>::<span class="fn">getCount</span>(); } <span class="cm">// 2</span>
+    cout &lt;&lt; <span class="ty">Employee</span>::<span class="fn">getCount</span>(); <span class="cm">// 0 (both destroyed)</span>
 }</code></pre>
-
     <table>
       <tr><th>Aspect</th><th>Static Member</th><th>Non-Static Member</th></tr>
       <tr><td>Belongs to</td><td>Class</td><td>Object</td></tr>
-      <tr><td>Memory</td><td>One copy (shared)</td><td>One per object</td></tr>
+      <tr><td>Copies</td><td>One shared</td><td>One per object</td></tr>
       <tr><td>Access</td><td>ClassName::member</td><td>obj.member</td></tr>
-      <tr><td>Needs object?</td><td>No</td><td>Yes</td></tr>
       <tr><td>this pointer</td><td>No</td><td>Yes</td></tr>
     </table>
-    <div class="warn-box">⚠️ Static functions cannot access non-static data members (no this pointer)!</div>
+    <div class="warn-box">⚠️ Static functions can ONLY access static members — no <code>this</code> pointer available!</div>
   </div>
 </div>
 </div>
@@ -872,103 +693,76 @@ arr[<span class="nm">0</span>] = <span class="nm">10</span>;
   <div class="section-label">Topic 7</div>
   <div class="card">
     <div class="card-header">
-      <div class="card-icon" style="background:var(--warn-light)">🔍</div>
-      <h2>Tracing Output &amp; Fixing Errors</h2>
+      <div class="card-icon" style="background:rgba(212,160,23,0.12)">🔍</div>
+      <h2>Tracing Output — Constructor/Destructor Order</h2>
     </div>
-    
-    <h3>Constructor/Destructor Order</h3>
-    <div class="info-box">Constructors: called in ORDER of creation. Destructors: called in REVERSE order (LIFO).</div>
+    <div class="info-box">Constructors: called in <strong>order of creation</strong>. Destructors: called in <strong>reverse (LIFO)</strong> order.</div>
 <pre><code><span class="kw">class</span> <span class="ty">Demo</span> {
     <span class="ty">string</span> name;
 <span class="kw">public</span>:
-    <span class="fn">Demo</span>(<span class="ty">string</span> n) : name(n) { cout &lt;&lt; <span class="st">"Ctor: "</span> &lt;&lt; name &lt;&lt; endl; }
-    ~<span class="fn">Demo</span>() { cout &lt;&lt; <span class="st">"Dtor: "</span> &lt;&lt; name &lt;&lt; endl; }
+    <span class="fn">Demo</span>(<span class="ty">string</span> n) : name(n) { cout &lt;&lt; <span class="st">"Ctor: "</span> &lt;&lt; name &lt;&lt; <span class="st">"\n"</span>; }
+    ~<span class="fn">Demo</span>()                  { cout &lt;&lt; <span class="st">"Dtor: "</span> &lt;&lt; name &lt;&lt; <span class="st">"\n"</span>; }
 };
-
 <span class="ty">int</span> <span class="fn">main</span>() {
     <span class="ty">Demo</span> a(<span class="st">"A"</span>);
     <span class="ty">Demo</span> b(<span class="st">"B"</span>);
-    {
-        <span class="ty">Demo</span> c(<span class="st">"C"</span>);
-    } <span class="cm">// c destroyed here</span>
+    { <span class="ty">Demo</span> c(<span class="st">"C"</span>); }  <span class="cm">// c destroyed here (scope ends)</span>
     <span class="ty">Demo</span> d(<span class="st">"D"</span>);
-} <span class="cm">// d, b, a destroyed (reverse)</span></code></pre>
-    <div style="background:#1e1e3f;border-radius:8px;padding:1rem 1.25rem;margin:0.75rem 0;font-family:monospace;font-size:0.82rem;color:#abb2bf">
-      <span style="color:#5c6370">Output:</span><br>
-      Ctor: A<br>Ctor: B<br>Ctor: C<br><span style="color:#e06c75">Dtor: C</span><br>Ctor: D<br><span style="color:#e06c75">Dtor: D</span><br><span style="color:#e06c75">Dtor: B</span><br><span style="color:#e06c75">Dtor: A</span>
-    </div>
-
-    <h3>Common Syntax Errors to Fix</h3>
-    <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">Error 1: Missing semicolon after class <span class="acc-arrow">▼</span></div>
-      <div class="acc-body">
-<pre><code><span class="cm">// WRONG</span>
-<span class="kw">class</span> <span class="ty">Box</span> {
-    <span class="ty">int</span> x;
-}  <span class="nm">// ← Missing semicolon!</span>
-
-<span class="cm">// CORRECT</span>
-<span class="kw">class</span> <span class="ty">Box</span> {
-    <span class="ty">int</span> x;
-};  <span class="cm">// ← Semicolon required!</span></code></pre>
-      </div>
-    </div>
-    <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">Error 2: Accessing private member directly <span class="acc-arrow">▼</span></div>
-      <div class="acc-body">
-<pre><code><span class="kw">class</span> <span class="ty">A</span> {
-<span class="kw">private</span>: <span class="ty">int</span> x;
-<span class="kw">public</span>: <span class="fn">A</span>(<span class="ty">int</span> v): x(v) {}
-};
-<span class="ty">int</span> <span class="fn">main</span>() {
-    <span class="ty">A</span> obj(<span class="nm">5</span>);
-    cout &lt;&lt; obj.x;  <span class="nm">// ERROR: x is private</span>
-    <span class="cm">// Fix: add a getter</span>
-}</code></pre>
-      </div>
-    </div>
-    <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">Error 3: Using delete instead of delete[] <span class="acc-arrow">▼</span></div>
-      <div class="acc-body">
-<pre><code><span class="ty">int</span>* arr = <span class="kw">new</span> <span class="ty">int</span>[<span class="nm">10</span>];
-<span class="kw">delete</span> arr;    <span class="nm">// WRONG — undefined behavior!</span>
-<span class="kw">delete</span>[] arr; <span class="cm">// CORRECT</span></code></pre>
-      </div>
-    </div>
-    <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">Error 4: Forgetting const in copy constructor <span class="acc-arrow">▼</span></div>
-      <div class="acc-body">
-<pre><code><span class="cm">// WRONG</span>
-<span class="fn">Student</span>(<span class="ty">Student</span>&amp; other) { ... }
-
-<span class="cm">// CORRECT — must be const reference</span>
-<span class="fn">Student</span>(<span class="kw">const</span> <span class="ty">Student</span>&amp; other) { ... }</code></pre>
-      </div>
-    </div>
-    <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">Error 5: Static member not defined outside class <span class="acc-arrow">▼</span></div>
-      <div class="acc-body">
-<pre><code><span class="kw">class</span> <span class="ty">A</span> {
-<span class="kw">public</span>:
-    <span class="kw">static</span> <span class="ty">int</span> count; <span class="cm">// declaration only!</span>
-};
-<span class="cm">// This line is REQUIRED outside the class:</span>
-<span class="ty">int</span> <span class="ty">A</span>::count = <span class="nm">0</span>; <span class="cm">// definition</span></code></pre>
-      </div>
+}  <span class="cm">// d, b, a destroyed (reverse order)</span></code></pre>
+    <div style="background:#0d1117;border:1px solid rgba(0,180,216,0.2);border-radius:10px;padding:1rem 1.25rem;margin:0.75rem 0;font-family:'Cascadia Code','Fira Code',monospace;font-size:0.8rem;line-height:1.8;color:#8b949e">
+      <span style="color:#484f58">// Expected Output:</span><br>
+      <span style="color:#a5d6ff">Ctor: A</span><br>
+      <span style="color:#a5d6ff">Ctor: B</span><br>
+      <span style="color:#a5d6ff">Ctor: C</span><br>
+      <span style="color:#ff7b72">Dtor: C</span> &nbsp;&nbsp;<span style="color:#484f58">← scope ended</span><br>
+      <span style="color:#a5d6ff">Ctor: D</span><br>
+      <span style="color:#ff7b72">Dtor: D</span><br>
+      <span style="color:#ff7b72">Dtor: B</span><br>
+      <span style="color:#ff7b72">Dtor: A</span> &nbsp;&nbsp;<span style="color:#484f58">← last created, last destroyed</span>
     </div>
   </div>
+</div>
+</div>
+
+<!-- COMPLETE THE CODE -->
+<div id="page-complete" class="page">
+<div class="container">
+  <div class="section-label">Interactive Exercises</div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(247,127,0,0.12)">✏️</div>
+      <h2>Complete the Code</h2>
+    </div>
+    <p>Fill in the blanks to complete the C++ programs. Click <strong>Check</strong> to verify or <strong>Reveal</strong> to see the answer.</p>
+  </div>
+  <div id="complete-container"></div>
+</div>
+</div>
+
+<!-- ERROR FINDING -->
+<div id="page-errors" class="page">
+<div class="container">
+  <div class="section-label">Debugging Challenges</div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(230,57,70,0.12)">🐛</div>
+      <h2>Find the Error</h2>
+    </div>
+    <p>Each code snippet has a bug. Identify what's wrong, then pick the correct fix. Buggy lines are highlighted in red.</p>
+  </div>
+  <div id="errors-container"></div>
 </div>
 </div>
 
 <!-- QUIZ -->
 <div id="page-quiz" class="page">
 <div class="container">
-  <div class="section-label">Practice Quiz</div>
+  <div class="section-label">Practice Quiz — 20 Questions</div>
   <div id="quiz-score-box" style="display:none" class="quiz-score">
-    <div class="big" id="score-display">0/20</div>
-    <div style="margin:0.5rem 0;font-size:0.9rem;opacity:0.85">Quiz Complete!</div>
-    <div id="score-msg" style="font-size:1rem;margin:0.5rem 0"></div>
-    <button class="btn" style="margin-top:1rem;background:rgba(255,255,255,0.2)" onclick="resetQuiz()">Try Again</button>
+    <div class="score-circle" id="score-display">0/20</div>
+    <div style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.3rem">Quiz Complete!</div>
+    <div id="score-msg" style="font-size:0.9rem;color:var(--text-muted)"></div>
+    <button class="btn btn-outline" style="margin-top:1.25rem" onclick="resetQuiz()">↺ Try Again</button>
   </div>
   <div id="quiz-container"></div>
   <div id="quiz-btn-area" style="text-align:center;margin-top:1.5rem"></div>
@@ -976,67 +770,650 @@ arr[<span class="nm">0</span>] = <span class="nm">10</span>;
 </div>
 
 <footer>
-  <div>Made with ❤️ by <strong>Muhammad Muaaz Ali</strong></div>
-  <div style="margin-top:0.3rem;font-size:0.75rem">C++ OOP Exam Prep Guide — All Topics Covered</div>
+  <div>Made with <span class="heart">♥</span> by <strong>Muhammad Muaaz Ali</strong></div>
+  <div style="margin-top:0.4rem;font-size:0.74rem;opacity:0.6">C++ OOP Exam Prep — All Topics Covered · Good Luck!</div>
 </footer>
 
 <script>
-const QUESTIONS = [
-  {q:"Which constructor is called when you write: Student s2 = s1;",opts:["Default Constructor","Parameterized Constructor","Copy Constructor","Move Constructor"],ans:2,exp:"Student s2 = s1 invokes the copy constructor, which takes a const reference to another object of the same class."},
-  {q:"What is the output order when 3 objects A, B, C are created and then go out of scope?",opts:["A B C then C B A (destructors)","A B C then A B C (destructors)","C B A then A B C","A B C then nothing"],ans:0,exp:"Constructors fire in order: A, B, C. Destructors fire in reverse LIFO order: C, B, A."},
-  {q:"What is the key difference between shallow copy and deep copy?",opts:["Shallow is faster","Deep copies pointer addresses, shallow allocates new memory","Shallow copies pointer addresses, deep allocates new memory","They are identical"],ans:2,exp:"Shallow copy copies the pointer address (both objects share same memory). Deep copy allocates new memory and copies the value — safe for dynamic memory."},
-  {q:"Which keyword grants a non-member function access to private members?",opts:["public","extern","friend","inline"],ans:2,exp:"The 'friend' keyword declared inside a class allows the specified non-member function to access all private and protected members."},
-  {q:"What is the correct signature for postfix ++ operator?",opts:["Counter& operator++()", "Counter operator++()", "Counter operator++(int)", "Counter& operator++(int)"],ans:2,exp:"Postfix ++ takes a dummy int parameter to distinguish it from prefix. It returns by value (old state), not by reference."},
-  {q:"Where must a static data member be defined?",opts:["Inside the class","Outside the class","In main()","In a constructor"],ans:1,exp:"Static data members are declared inside the class but MUST be defined (and optionally initialized) outside the class using ClassName::member = value;"},
-  {q:"Why must operator<< be a friend function?",opts:["It's a rule","The left operand is ostream, not our class","It's more efficient","Friend functions are faster"],ans:1,exp:"For cout << obj, the left operand is ostream (cout), not our class. Since we can't modify ostream, we make it a friend function that takes ostream& as first parameter."},
-  {q:"What is an initializer list?",opts:["A list of member functions","Syntax to initialize members before constructor body runs","A way to list all objects","A type of array"],ans:1,exp:"Initializer lists use colon syntax: Constructor() : member1(val1), member2(val2) {}. They initialize before the constructor body, required for const and reference members."},
-  {q:"Which is correct for deleting a dynamically allocated array?",opts:["delete ptr","free(ptr)","delete[] ptr","delete *ptr"],ans:2,exp:"Arrays allocated with new Type[n] MUST be freed with delete[] ptr. Using delete (without []) causes undefined behavior."},
-  {q:"What does encapsulation mean in OOP?",opts:["Hiding the class from other files","Bundling data and functions, restricting direct access","Making all members public","Using templates"],ans:1,exp:"Encapsulation = bundling data members and functions together in a class, and restricting direct access to data by using private/protected access specifiers."},
-  {q:"In pass by reference, what happens to the original variable?",opts:["A copy is made","Original is modified","Nothing changes","It is deleted"],ans:1,exp:"Pass by reference (int& x) passes the actual variable, not a copy. Any changes inside the function affect the original variable."},
-  {q:"Which is NOT a property of a destructor?",opts:["Same name as class with ~","No return type","Can be overloaded","Called automatically"],ans:2,exp:"Destructors cannot be overloaded. There is only ONE destructor per class. All other options are valid destructor properties."},
-  {q:"What does 'this' pointer refer to?",opts:["The parent class","The next object in memory","The current object","A static pointer"],ans:2,exp:"'this' is an implicit pointer in every non-static member function that points to the current object on which the function is being called."},
-  {q:"When is the copy constructor NOT called?",opts:["Student s2(s1)","Student s2 = s1","s2 = s1 (already created objects)","Passing object by value"],ans:2,exp:"s2 = s1 when s2 already exists calls the copy ASSIGNMENT operator (=), not the copy constructor. Copy constructor is only for initialization."},
-  {q:"What must you always check in the assignment operator?",opts:["Size is correct","Self-assignment (this != &other)","Constructor was called","Memory is available"],ans:1,exp:"Always check for self-assignment (if this != &other) before deleting old memory in the assignment operator. Otherwise x = x would delete its own data!"},
-  {q:"Static member functions cannot access:",opts:["Static data members","Other static functions","Non-static data members","Public static members"],ans:2,exp:"Static functions have no 'this' pointer, so they cannot access non-static (instance) data members. They can only access static members."},
-  {q:"What is the 'Rule of Three' in C++?",opts:["Always have 3 constructors","If you define destructor, copy ctor, or copy assignment — define all three","A class should have 3 public methods","Always use 3 access specifiers"],ans:1,exp:"Rule of Three: if your class needs a custom destructor, copy constructor, or copy assignment operator (typically due to dynamic memory), you should define all three."},
-  {q:"Which operator overload must return ostream& for chaining to work?",opts:["== operator","+ operator","<< operator","= operator"],ans:2,exp:"The << operator must return ostream& so that chaining (cout << a << b) works. Each << call returns the same ostream, allowing the next << to work on it."},
-  {q:"What is the default access specifier in a C++ class?",opts:["public","protected","private","none"],ans:2,exp:"Default access in a CLASS is private. This differs from struct where default is public. Members not under any specifier are private."},
-  {q:"Prefix ++ should return:",opts:["A copy of old value","Reference to current object","A new object","void"],ans:1,exp:"Prefix ++ modifies the object and returns a reference to the current (already incremented) object — enabling ++a to be used as an lvalue."}
+// ─────────────────────────────────────────────
+// COMPLETE THE CODE DATA
+// ─────────────────────────────────────────────
+const COMPLETE_TASKS = [
+  {
+    title: "Default Constructor",
+    desc: "Complete the default constructor that sets name to 'Unknown' and age to 0.",
+    topic: "Constructors",
+    lines: [
+      { text: "class Student {", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    string name; int age;", type: "code" },
+      { text: "    Student()", blank: true, answer: ": name(\"Unknown\"), age(0)", placeholder: "initializer list..." },
+      { text: "    { cout << \"Default ctor\\n\"; }", type: "code" },
+      { text: "};", type: "code" }
+    ]
+  },
+  {
+    title: "Copy Constructor",
+    desc: "Fill in the copy constructor parameter — it must take a const reference.",
+    topic: "Constructors",
+    lines: [
+      { text: "class Box {", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    int width;", type: "code" },
+      { text: "    Box(int w) : width(w) {}", type: "code" },
+      { text: "    Box(", blank: true, answer: "const Box& other", placeholder: "parameter..." },
+      { text: "    ) { width = other.width; }", type: "code" },
+      { text: "};", type: "code" }
+    ]
+  },
+  {
+    title: "Operator << Overload",
+    desc: "Fill in the keyword that must precede the << operator declaration inside the class.",
+    topic: "Operators",
+    lines: [
+      { text: "class Point {", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    int x, y;", type: "code" },
+      { text: "    ", blank: true, answer: "friend", placeholder: "keyword..." },
+      { text: "    ostream& operator<<(ostream& out, const Point& p) {", type: "code" },
+      { text: "        out << p.x << \",\" << p.y;", type: "code" },
+      { text: "        return out;", type: "code" },
+      { text: "    }", type: "code" },
+      { text: "};", type: "code" }
+    ]
+  },
+  {
+    title: "Destructor",
+    desc: "Complete the destructor — free the dynamically allocated array.",
+    topic: "Destructor",
+    lines: [
+      { text: "class DynArr {", type: "code" },
+      { text: "    int* arr;", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    DynArr(int n) { arr = new int[n]; }", type: "code" },
+      { text: "    ~DynArr() {", type: "code" },
+      { text: "        ", blank: true, answer: "delete[] arr;", placeholder: "free memory..." },
+      { text: "    }", type: "code" },
+      { text: "};", type: "code" }
+    ]
+  },
+  {
+    title: "Prefix ++ Operator",
+    desc: "Complete the prefix increment operator return statement.",
+    topic: "Operators",
+    lines: [
+      { text: "class Counter {", type: "code" },
+      { text: "    int n;", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    Counter(int n=0) : n(n) {}", type: "code" },
+      { text: "    Counter& operator++() {", type: "code" },
+      { text: "        ++n;", type: "code" },
+      { text: "        return ", blank: true, answer: "*this", placeholder: "..." },
+      { text: "        ;", type: "code" },
+      { text: "    }", type: "code" },
+      { text: "};", type: "code" }
+    ]
+  },
+  {
+    title: "Postfix ++ Operator",
+    desc: "Complete the postfix operator — it needs a dummy parameter to distinguish from prefix.",
+    topic: "Operators",
+    lines: [
+      { text: "class Counter {", type: "code" },
+      { text: "    int n;", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    Counter operator++(", blank: true, answer: "int", placeholder: "parameter..." },
+      { text: "    ) {", type: "code" },
+      { text: "        Counter temp = *this;", type: "code" },
+      { text: "        ++n;", type: "code" },
+      { text: "        return temp;", type: "code" },
+      { text: "    }", type: "code" },
+      { text: "};", type: "code" }
+    ]
+  },
+  {
+    title: "Static Member Definition",
+    desc: "Static members must be defined outside the class. Fill in the correct syntax.",
+    topic: "Static",
+    lines: [
+      { text: "class Employee {", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    static int count;", type: "code" },
+      { text: "};", type: "code" },
+      { text: "", blank: true, answer: "int Employee::count = 0;", placeholder: "definition..." }
+    ]
+  },
+  {
+    title: "Assignment Operator Self-Check",
+    desc: "Fill in the self-assignment guard condition in the = operator.",
+    topic: "Operators",
+    lines: [
+      { text: "MyArr& operator=(const MyArr& o) {", type: "code" },
+      { text: "    if (", blank: true, answer: "this != &o", placeholder: "condition..." },
+      { text: "    ) {", type: "code" },
+      { text: "        delete[] data;", type: "code" },
+      { text: "        // ... copy data", type: "code" },
+      { text: "    }", type: "code" },
+      { text: "    return *this;", type: "code" },
+      { text: "}", type: "code" }
+    ]
+  },
+  {
+    title: "Friend Function Declaration",
+    desc: "Declare a friend function 'printArea' inside the Rectangle class.",
+    topic: "Friend Functions",
+    lines: [
+      { text: "class Rectangle {", type: "code" },
+      { text: "    double w, h;", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    Rectangle(double w, double h) : w(w), h(h) {}", type: "code" },
+      { text: "    ", blank: true, answer: "friend void printArea(Rectangle& r);", placeholder: "friend declaration..." },
+      { text: "};", type: "code" },
+      { text: "void printArea(Rectangle& r) {", type: "code" },
+      { text: "    cout << r.w * r.h;", type: "code" },
+      { text: "}", type: "code" }
+    ]
+  },
+  {
+    title: "Deep Copy Constructor",
+    desc: "Complete the deep copy — allocate new memory for the pointer.",
+    topic: "Deep Copy",
+    lines: [
+      { text: "class Deep {", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    int* data;", type: "code" },
+      { text: "    Deep(int v) { data = new int(v); }", type: "code" },
+      { text: "    Deep(const Deep& o) {", type: "code" },
+      { text: "        data = ", blank: true, answer: "new int(*o.data)", placeholder: "deep copy..." },
+      { text: "        ;", type: "code" },
+      { text: "    }", type: "code" },
+      { text: "    ~Deep() { delete data; }", type: "code" },
+      { text: "};", type: "code" }
+    ]
+  },
+  {
+    title: "Encapsulation Getter",
+    desc: "Write a getter for the private 'balance' variable. It should be a const function.",
+    topic: "Encapsulation",
+    lines: [
+      { text: "class Bank {", type: "code" },
+      { text: "    double balance;", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    Bank(double b) : balance(b) {}", type: "code" },
+      { text: "    ", blank: true, answer: "double getBalance() const { return balance; }", placeholder: "getter..." },
+      { text: "};", type: "code" }
+    ]
+  },
+  {
+    title: "== Operator Overload",
+    desc: "Complete the == operator that compares students by their id.",
+    topic: "Operators",
+    lines: [
+      { text: "class Student {", type: "code" },
+      { text: "public:", type: "code" },
+      { text: "    int id;", type: "code" },
+      { text: "    bool operator==(const Student& o) const {", type: "code" },
+      { text: "        return ", blank: true, answer: "id == o.id", placeholder: "comparison..." },
+      { text: "        ;", type: "code" },
+      { text: "    }", type: "code" },
+      { text: "};", type: "code" }
+    ]
+  }
 ];
 
-let userAnswers = {};
-let quizDone = false;
+// ─────────────────────────────────────────────
+// ERROR FINDING DATA
+// ─────────────────────────────────────────────
+const ERROR_TASKS = [
+  {
+    title: "Missing Semicolon After Class",
+    desc: "This class definition has a common syntax error. What's wrong?",
+    topic: "Syntax",
+    code: [
+      "class Box {",
+      "    int width;",
+      "public:",
+      "    Box(int w) : width(w) {}",
+      "}  // ← look here",
+      "",
+      "int main() { Box b(5); }"
+    ],
+    bugLine: 4,
+    opts: [
+      "Missing public: before width",
+      "Missing semicolon after the closing brace of the class",
+      "Constructor should use = instead of :",
+      "int should be double"
+    ],
+    ans: 1,
+    fix: "Change <code>}</code> to <code>};</code> — class definitions must end with a semicolon."
+  },
+  {
+    title: "Wrong Delete for Array",
+    desc: "The array was allocated with new[], but something is wrong with how it's freed.",
+    topic: "Dynamic Memory",
+    code: [
+      "int main() {",
+      "    int* arr = new int[10];",
+      "    arr[0] = 42;",
+      "    delete arr;   // ← bug here",
+      "}"
+    ],
+    bugLine: 3,
+    opts: [
+      "Should use free(arr) instead",
+      "Should use delete[] arr to free an array",
+      "arr should be int** not int*",
+      "new int[10] is wrong syntax"
+    ],
+    ans: 1,
+    fix: "Use <code>delete[] arr;</code> — arrays allocated with <code>new[]</code> must be freed with <code>delete[]</code>."
+  },
+  {
+    title: "Copy Constructor Missing const",
+    desc: "The copy constructor parameter is incorrect — spot the issue.",
+    topic: "Constructors",
+    code: [
+      "class Student {",
+      "    string name;",
+      "public:",
+      "    Student(string n) : name(n) {}",
+      "    Student(Student& other)  // ← check parameter",
+      "        : name(other.name) {}",
+      "};"
+    ],
+    bugLine: 4,
+    opts: [
+      "Should be Student(Student other) — pass by value",
+      "Should be Student(const Student& other) — missing const",
+      "Should be Student(Student* other) — pass by pointer",
+      "Copy constructors don't exist in C++"
+    ],
+    ans: 1,
+    fix: "Change to <code>Student(const Student& other)</code> — copy constructor must take a <code>const</code> reference."
+  },
+  {
+    title: "Static Member Not Defined Outside",
+    desc: "This code will cause a linker error. Find the bug.",
+    topic: "Static",
+    code: [
+      "class Counter {",
+      "public:",
+      "    static int count;",
+      "    Counter() { count++; }",
+      "};",
+      "",
+      "// Missing something here!",
+      "",
+      "int main() {",
+      "    Counter c1, c2;",
+      "    cout << Counter::count;",
+      "}"
+    ],
+    bugLine: 6,
+    opts: [
+      "count should not be static",
+      "Static member 'count' must be defined outside the class: int Counter::count = 0;",
+      "Counter() should be static too",
+      "cout should use c1.count not Counter::count"
+    ],
+    ans: 1,
+    fix: "Add <code>int Counter::count = 0;</code> outside the class — static members must be defined outside."
+  },
+  {
+    title: "Accessing Private Member",
+    desc: "This code tries to access something it shouldn't. What's the error?",
+    topic: "Encapsulation",
+    code: [
+      "class Person {",
+      "private:",
+      "    int age;",
+      "public:",
+      "    Person(int a) : age(a) {}",
+      "};",
+      "",
+      "int main() {",
+      "    Person p(25);",
+      "    cout << p.age;  // ← bug",
+      "}"
+    ],
+    bugLine: 9,
+    opts: [
+      "Person constructor is wrong",
+      "cout syntax is incorrect",
+      "age is private — cannot access directly; add a public getter",
+      "p should be a pointer"
+    ],
+    ans: 2,
+    fix: "Add a public getter: <code>int getAge() const { return age; }</code> and call <code>p.getAge()</code> instead."
+  },
+  {
+    title: "Missing self-assignment check in =",
+    desc: "The assignment operator has a dangerous bug. Find it.",
+    topic: "Operators",
+    code: [
+      "MyArr& operator=(const MyArr& o) {",
+      "    delete[] data;       // ← danger!",
+      "    size = o.size;",
+      "    data = new int[size];",
+      "    for(int i=0; i<size; i++)",
+      "        data[i] = o.data[i];",
+      "    return *this;",
+      "}"
+    ],
+    bugLine: 1,
+    opts: [
+      "Should use delete not delete[]",
+      "return *this should be return this",
+      "Missing self-assignment check — if obj = obj, data is deleted before copying",
+      "size should be copied after allocating memory"
+    ],
+    ans: 2,
+    fix: "Add <code>if (this != &o)</code> guard before <code>delete[] data</code> to prevent self-assignment corruption."
+  },
+  {
+    title: "Postfix ++ Missing Dummy Parameter",
+    desc: "The postfix ++ is incorrectly declared. What's missing?",
+    topic: "Operators",
+    code: [
+      "class Counter {",
+      "    int n;",
+      "public:",
+      "    Counter(int n=0) : n(n) {}",
+      "    Counter operator++()  // ← which ++ is this?",
+      "    {",
+      "        Counter t = *this;",
+      "        ++n;",
+      "        return t;",
+      "    }",
+      "};"
+    ],
+    bugLine: 4,
+    opts: [
+      "The return type should be Counter&",
+      "Should return *this not t",
+      "Postfix ++ needs a dummy int parameter: operator++(int)",
+      "n should be incremented before saving temp"
+    ],
+    ans: 2,
+    fix: "Change to <code>Counter operator++(int)</code> — the dummy <code>int</code> distinguishes postfix from prefix."
+  },
+  {
+    title: "Constructor Has Return Type",
+    desc: "This constructor has a subtle but fatal error. Spot it.",
+    topic: "Constructors",
+    code: [
+      "class Circle {",
+      "    double r;",
+      "public:",
+      "    void Circle(double radius)  // ← problem here",
+      "    : r(radius) {}",
+      "};"
+    ],
+    bugLine: 3,
+    opts: [
+      "Initializer list should not be used here",
+      "Constructors must NOT have a return type — remove 'void'",
+      "Parameter should be passed by reference",
+      "Class name should match file name"
+    ],
+    ans: 1,
+    fix: "Remove <code>void</code> — constructors have <strong>no return type</strong>. Write: <code>Circle(double radius) : r(radius) {}</code>"
+  },
+  {
+    title: "Using delete Instead of delete[]",
+    desc: "A class destructor has a memory-related bug. Identify it.",
+    topic: "Destructor",
+    code: [
+      "class Buffer {",
+      "    char* data;",
+      "public:",
+      "    Buffer(int n) { data = new char[n]; }",
+      "    ~Buffer() {",
+      "        delete data;   // ← should be...?",
+      "    }",
+      "};"
+    ],
+    bugLine: 5,
+    opts: [
+      "Destructor should call free() instead",
+      "delete data is correct for arrays",
+      "Should use delete[] data — array was allocated with new[]",
+      "Destructor should have a return type of void"
+    ],
+    ans: 2,
+    fix: "Use <code>delete[] data;</code> — since <code>data</code> was allocated with <code>new char[n]</code>, it must be freed with <code>delete[]</code>."
+  },
+  {
+    title: "Static Function Accessing Non-Static Member",
+    desc: "This static function has a logic error. What's the problem?",
+    topic: "Static",
+    code: [
+      "class Worker {",
+      "    string name;",
+      "    static int count;",
+      "public:",
+      "    Worker(string n) : name(n) { count++; }",
+      "    static void showInfo() {",
+      "        cout << name;   // ← illegal!",
+      "        cout << count;",
+      "    }",
+      "};"
+    ],
+    bugLine: 6,
+    opts: [
+      "Static functions cannot use cout",
+      "Static functions have no 'this' pointer — cannot access non-static 'name'",
+      "name should be static too",
+      "count cannot be printed inside a static function"
+    ],
+    ans: 1,
+    fix: "Remove <code>cout << name;</code> — static functions have no <code>this</code> pointer and cannot access non-static members like <code>name</code>."
+  }
+];
 
+// ─────────────────────────────────────────────
+// BUILD COMPLETE THE CODE
+// ─────────────────────────────────────────────
+function buildComplete() {
+  const c = document.getElementById('complete-container');
+  c.innerHTML = '';
+  COMPLETE_TASKS.forEach((task, ti) => {
+    const div = document.createElement('div');
+    div.className = 'complete-task';
+    div.id = 'ctask' + ti;
+    let codeHTML = '<div class="fill-area" style="position:relative">';
+    task.lines.forEach((line, li) => {
+      if (line.blank) {
+        codeHTML += `<span style="color:#8b949e">${escH(line.text || '')}</span><input class="fill-input" id="fill_${ti}_${li}" placeholder="${escH(line.placeholder)}" style="width:${Math.max(line.answer.length * 8 + 40, 100)}px" autocomplete="off" spellcheck="false">`;
+      } else {
+        codeHTML += `<span style="color:#8b949e">${escH(line.text)}</span>`;
+      }
+      if (li < task.lines.length - 1) codeHTML += '\n';
+    });
+    codeHTML += '</div>';
+    div.innerHTML = `
+      <div class="task-header">
+        <span class="task-title">${task.title}</span>
+        <span class="badge badge-accent">${task.topic}</span>
+      </div>
+      <div class="task-desc">${task.desc}</div>
+      ${codeHTML}
+      <div class="task-actions">
+        <button class="btn btn-sm btn-accent" onclick="checkComplete(${ti})">✓ Check</button>
+        <button class="btn btn-sm btn-outline" onclick="revealComplete(${ti})">👁 Reveal</button>
+        <button class="btn btn-sm" style="background:var(--bg3);color:var(--text-muted);border:1px solid var(--border2)" onclick="resetComplete(${ti})">↺ Reset</button>
+      </div>
+      <div class="task-feedback" id="cfb_${ti}"></div>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function checkComplete(ti) {
+  const task = COMPLETE_TASKS[ti];
+  let allCorrect = true;
+  task.lines.forEach((line, li) => {
+    if (!line.blank) return;
+    const inp = document.getElementById(`fill_${ti}_${li}`);
+    const userVal = inp.value.trim().replace(/\s+/g, ' ');
+    const ansVal = line.answer.trim().replace(/\s+/g, ' ');
+    if (userVal.toLowerCase() === ansVal.toLowerCase()) {
+      inp.className = 'fill-input correct-fill';
+    } else {
+      inp.className = 'fill-input wrong-fill';
+      allCorrect = false;
+    }
+  });
+  const fb = document.getElementById(`cfb_${ti}`);
+  fb.className = 'task-feedback show ' + (allCorrect ? 'ok' : 'fail');
+  fb.textContent = allCorrect ? '✅ Correct! Well done!' : '❌ Not quite. Check highlighted fields or click Reveal.';
+}
+
+function revealComplete(ti) {
+  const task = COMPLETE_TASKS[ti];
+  task.lines.forEach((line, li) => {
+    if (!line.blank) return;
+    const inp = document.getElementById(`fill_${ti}_${li}`);
+    inp.value = line.answer;
+    inp.className = 'fill-input correct-fill';
+  });
+  const fb = document.getElementById(`cfb_${ti}`);
+  fb.className = 'task-feedback show ok';
+  fb.textContent = '💡 Answer revealed: ' + task.lines.find(l=>l.blank).answer;
+}
+
+function resetComplete(ti) {
+  const task = COMPLETE_TASKS[ti];
+  task.lines.forEach((line, li) => {
+    if (!line.blank) return;
+    const inp = document.getElementById(`fill_${ti}_${li}`);
+    inp.value = '';
+    inp.className = 'fill-input';
+  });
+  const fb = document.getElementById(`cfb_${ti}`);
+  fb.className = 'task-feedback';
+}
+
+// ─────────────────────────────────────────────
+// BUILD ERROR FINDING
+// ─────────────────────────────────────────────
+function buildErrors() {
+  const c = document.getElementById('errors-container');
+  c.innerHTML = '';
+  ERROR_TASKS.forEach((task, ti) => {
+    const div = document.createElement('div');
+    div.className = 'error-task';
+    div.id = 'etask' + ti;
+    let codeHTML = '<div class="buggy-code">';
+    task.code.forEach((line, li) => {
+      if (li === task.bugLine) {
+        codeHTML += `<span class="bug-line">${escH(line)}</span>`;
+      } else {
+        codeHTML += escH(line) + (li < task.code.length-1 ? '\n' : '');
+      }
+    });
+    codeHTML += '</div>';
+    const optsHTML = task.opts.map((opt, oi) =>
+      `<button class="error-opt" id="eopt_${ti}_${oi}" onclick="checkError(${ti},${oi})">${String.fromCharCode(65+oi)}. ${escH(opt)}</button>`
+    ).join('');
+    div.innerHTML = `
+      <div class="etask-header">
+        <span style="font-size:1.1rem">🐛</span>
+        <span class="etask-title">${task.title}</span>
+        <span class="badge badge-danger">${task.topic}</span>
+      </div>
+      <div class="etask-desc">${task.desc}</div>
+      ${codeHTML}
+      <div class="error-answer">
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.4rem;font-weight:600">What is the error?</div>
+        <div class="error-options">${optsHTML}</div>
+        <button class="btn btn-sm btn-outline" style="margin-top:0.5rem;border-color:var(--danger);color:var(--danger)" onclick="revealError(${ti})">👁 Show Answer</button>
+      </div>
+      <div class="fix-reveal" id="efix_${ti}">🔧 <strong>Fix:</strong> ${task.fix}</div>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function checkError(ti, oi) {
+  const task = ERROR_TASKS[ti];
+  const opts = document.querySelectorAll(`#etask${ti} .error-opt`);
+  opts.forEach((b,j) => {
+    b.onclick = null;
+    if (j === task.ans) b.classList.add('correct');
+    else if (j === oi && oi !== task.ans) b.classList.add('wrong');
+  });
+  document.getElementById(`efix_${ti}`).classList.add('show');
+}
+
+function revealError(ti) {
+  const task = ERROR_TASKS[ti];
+  const opts = document.querySelectorAll(`#etask${ti} .error-opt`);
+  opts.forEach((b,j) => {
+    b.onclick = null;
+    if (j === task.ans) b.classList.add('reveal-err');
+  });
+  document.getElementById(`efix_${ti}`).classList.add('show');
+}
+
+// ─────────────────────────────────────────────
+// QUIZ
+// ─────────────────────────────────────────────
+const QUESTIONS = [
+  {q:"Which constructor is called by: Student s2 = s1;",opts:["Default","Parameterized","Copy","Move"],ans:2,exp:"Student s2 = s1 invokes the copy constructor, which takes a const reference to an existing object of the same class."},
+  {q:"Constructors are destroyed in what order?",opts:["Same order as creation","Reverse order of creation (LIFO)","Alphabetical by name","Random"],ans:1,exp:"Destructors fire in LIFO (Last In First Out) order — the last object created is the first destroyed."},
+  {q:"Shallow copy vs deep copy: what does shallow copy copy for pointer members?",opts:["Allocates new memory","Copies the pointer address only","Copies the pointed-to value","Nothing"],ans:1,exp:"Shallow copy copies the pointer address — both objects end up pointing to the same memory, leading to double-delete crashes."},
+  {q:"Which keyword grants a non-member function access to private members?",opts:["public","extern","friend","inline"],ans:2,exp:"The 'friend' keyword inside a class allows the specified external function to access all private and protected members."},
+  {q:"Correct signature for postfix ++ operator?",opts:["Counter& operator++()","Counter operator++()","Counter operator++(int)","Counter& operator++(int)"],ans:2,exp:"Postfix ++ takes a dummy int parameter to distinguish it from prefix. It returns by value (saves old state before incrementing)."},
+  {q:"Where must a static data member be defined?",opts:["Inside the class","Outside the class","In main()","In the constructor"],ans:1,exp:"Static data members are declared inside the class but MUST be defined outside using ClassName::member = value;"},
+  {q:"Why must operator<< be a friend function?",opts:["It's a convention","The left operand is ostream, not our class","It's more efficient","Friend functions run faster"],ans:1,exp:"For cout << obj, the left operand is ostream (cout), not our class. Since we can't modify ostream, we declare it a friend."},
+  {q:"Initializer lists are REQUIRED for which type of member?",opts:["int members","const members and references","static members","public members"],ans:1,exp:"const and reference members cannot be assigned in the constructor body — they MUST be initialized via initializer list."},
+  {q:"Which is correct for deleting a dynamically allocated array?",opts:["delete ptr","free(ptr)","delete[] ptr","delete *ptr"],ans:2,exp:"Arrays allocated with new Type[n] MUST be freed with delete[] ptr. Using delete (no brackets) causes undefined behavior."},
+  {q:"What does encapsulation achieve?",opts:["Makes all members public","Hides data and controls access through methods","Groups multiple classes together","Speeds up the program"],ans:1,exp:"Encapsulation = bundling data + functions, keeping data private, exposing only controlled public interfaces."},
+  {q:"Pass by reference (int& x) — what happens to the original?",opts:["A copy is modified","Original is modified","Nothing changes","It is deleted"],ans:1,exp:"Pass by reference passes the actual variable. Any changes inside the function directly affect the original variable."},
+  {q:"Which is NOT a valid property of a destructor?",opts:["Same name as class with ~","No return type","Can be overloaded","Called automatically"],ans:2,exp:"Destructors CANNOT be overloaded. There is exactly ONE destructor per class. All other options are valid."},
+  {q:"What does 'this' pointer refer to inside a member function?",opts:["The parent class","Next object in memory","The current object","A static pointer"],ans:2,exp:"'this' is an implicit pointer available in all non-static member functions pointing to the current object."},
+  {q:"s2 = s1 (when s2 already exists) calls which?",opts:["Copy constructor","Default constructor","Copy assignment operator","Destructor"],ans:2,exp:"When both objects already exist, s2 = s1 calls the copy assignment operator (=), NOT the copy constructor."},
+  {q:"What must always be checked in the assignment operator?",opts:["Size matches","Self-assignment (this != &other)","Constructor was called","Memory is available"],ans:1,exp:"Always check if (this != &other) before deleting old memory. Without this, x = x would destroy its own data!"},
+  {q:"Static functions cannot access:",opts:["Static data members","Other static functions","Non-static data members","Public static members"],ans:2,exp:"Static functions have no 'this' pointer, so they cannot access non-static instance members."},
+  {q:"The 'Rule of Three' says:",opts:["Always write 3 constructors","If you define destructor, copy ctor, or copy assignment — define all three","Classes need 3 access specifiers","Always have 3 public methods"],ans:1,exp:"Rule of Three: if a class needs any one of destructor/copy ctor/copy assignment (usually for dynamic memory), define all three."},
+  {q:"operator<< must return what for chaining to work?",opts:["void","bool","ostream&","ClassName&"],ans:2,exp:"The << operator must return ostream& so cout << a << b works — each << call returns the same stream for the next one."},
+  {q:"Default access specifier in a C++ class is?",opts:["public","protected","private","none"],ans:2,exp:"Default access in a CLASS is private. (In struct, it's public.) Members with no specifier listed are treated as private."},
+  {q:"Prefix ++ should return?",opts:["Copy of old value","Reference to current object after increment","New object","void"],ans:1,exp:"Prefix ++ modifies the object first, then returns a reference to itself — enabling ++a to be used as an lvalue."}
+];
+
+let userAnswers = {}, quizDone = false;
 function buildQuiz() {
-  const container = document.getElementById('quiz-container');
-  container.innerHTML = '';
+  const c = document.getElementById('quiz-container');
+  c.innerHTML = '';
   QUESTIONS.forEach((q, i) => {
     const div = document.createElement('div');
     div.className = 'quiz-q';
     div.id = 'q' + i;
-    div.innerHTML = `<div class="q-text">Q${i+1}. ${q.q}</div>
+    div.innerHTML = `<div class="q-num">Question ${i+1} of ${QUESTIONS.length}</div>
+      <div class="q-text">${q.q}</div>
       <div class="quiz-options">
         ${q.opts.map((opt,j)=>`<button class="quiz-opt" onclick="selectAnswer(${i},${j})" id="opt_${i}_${j}">${String.fromCharCode(65+j)}. ${opt}</button>`).join('')}
       </div>
       <div class="explanation" id="exp_${i}">💡 ${q.exp}</div>`;
-    container.appendChild(div);
+    c.appendChild(div);
   });
-  document.getElementById('quiz-btn-area').innerHTML = `<button class="btn" onclick="submitQuiz()">Submit Quiz</button>`;
+  document.getElementById('quiz-btn-area').innerHTML = `<button class="btn" onclick="submitQuiz()">Submit All Answers →</button>`;
 }
 
 function selectAnswer(qi, oi) {
   if (quizDone) return;
-  document.querySelectorAll(`#q${qi} .quiz-opt`).forEach(b => b.classList.remove('correct','wrong','reveal'));
   userAnswers[qi] = oi;
-  const btn = document.getElementById(`opt_${qi}_${oi}`);
-  btn.style.borderColor = 'var(--primary)';
-  btn.style.background = 'var(--primary-light)';
   document.querySelectorAll(`#q${qi} .quiz-opt`).forEach((b,j) => {
     b.style.borderColor = '';
     b.style.background = '';
+    b.style.color = '';
   });
-  document.getElementById(`opt_${qi}_${oi}`).style.borderColor = 'var(--primary)';
-  document.getElementById(`opt_${qi}_${oi}`).style.background = 'var(--primary-light)';
+  const sel = document.getElementById(`opt_${qi}_${oi}`);
+  sel.style.borderColor = 'var(--primary)';
+  sel.style.background = 'rgba(0,180,216,0.1)';
+  sel.style.color = 'var(--primary)';
 }
 
 function submitQuiz() {
@@ -1045,7 +1422,7 @@ function submitQuiz() {
   QUESTIONS.forEach((q, i) => {
     const chosen = userAnswers[i];
     document.querySelectorAll(`#q${i} .quiz-opt`).forEach((b,j) => {
-      b.style.borderColor = ''; b.style.background = '';
+      b.style.borderColor=''; b.style.background=''; b.style.color='';
       if (j === q.ans) b.classList.add('correct');
       else if (j === chosen && chosen !== q.ans) b.classList.add('wrong');
     });
@@ -1054,40 +1431,45 @@ function submitQuiz() {
   });
   const sb = document.getElementById('quiz-score-box');
   sb.style.display = 'block';
-  document.getElementById('score-display').textContent = `${score}/20`;
-  const pct = (score/20)*100;
-  let msg = pct >= 90 ? '🏆 Excellent! You are ready for the exam!' :
-            pct >= 70 ? '👍 Good job! Review the incorrect ones.' :
-            pct >= 50 ? '📚 Keep studying — focus on weak areas.' :
-            '💪 Don\'t give up! Go through the topics again.';
-  document.getElementById('score-msg').textContent = msg;
+  const pct = Math.round((score/QUESTIONS.length)*100);
+  document.getElementById('score-display').textContent = `${score}/${QUESTIONS.length}`;
+  document.getElementById('score-display').style.borderColor = pct>=70?'var(--success)':pct>=50?'var(--warn)':'var(--danger)';
+  document.getElementById('score-display').style.color = pct>=70?'#3fb968':pct>=50?'#f0b429':'#ff6b6b';
+  document.getElementById('score-msg').textContent =
+    pct>=90?'🏆 Excellent! You\'re ready for the exam!' :
+    pct>=70?'👍 Good job! Review the ones you missed.' :
+    pct>=50?'📚 Keep studying — focus on weaker areas.' :
+    '💪 Don\'t give up — go through the topics again!';
   document.getElementById('quiz-btn-area').innerHTML = '';
   sb.scrollIntoView({behavior:'smooth'});
 }
 
 function resetQuiz() {
-  userAnswers = {};
-  quizDone = false;
+  userAnswers = {}; quizDone = false;
   document.getElementById('quiz-score-box').style.display = 'none';
   buildQuiz();
 }
 
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+const PAGE_MAP = {home:0,basics:1,constructors:2,memory:3,encapsulation:4,functions:5,operators:6,static:7,tracing:8,complete:9,errors:10,quiz:11};
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   const tabs = document.querySelectorAll('.nav-tab');
-  const map = {home:0,basics:1,constructors:2,memory:3,encapsulation:4,functions:5,operators:6,static:7,tracing:8,quiz:9};
-  if (map[id] !== undefined) tabs[map[id]].classList.add('active');
-  window.scrollTo(0,0);
-  if (id === 'quiz' && document.getElementById('quiz-container').innerHTML === '') buildQuiz();
+  if (PAGE_MAP[id] !== undefined) tabs[PAGE_MAP[id]].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (id === 'quiz' && !document.getElementById('quiz-container').children.length) buildQuiz();
+  if (id === 'complete' && !document.getElementById('complete-container').children.length) buildComplete();
+  if (id === 'errors' && !document.getElementById('errors-container').children.length) buildErrors();
 }
 
-function toggleAcc(header) {
-  const acc = header.parentElement;
-  acc.classList.toggle('open');
-}
+function toggleAcc(header) { header.parentElement.classList.toggle('open'); }
+function escH(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+// init
 buildQuiz();
 </script>
 </body>
